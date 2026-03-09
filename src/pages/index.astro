@@ -1,30 +1,238 @@
 ---
+import Layout from '../layouts/Layout.astro';
 import '@fontsource/space-grotesk/500.css';
 import '@fontsource/space-grotesk/700.css';
 import '@fontsource/jetbrains-mono/400.css';
 import '@fontsource/jetbrains-mono/700.css';
-import ProposalThree from '../components/proposals/ProposalThree.astro';
-import { getProposalData } from '../lib/proposals';
+import { getHomepageData } from '../lib/homepage';
 
-const data = await getProposalData();
+const data = await getHomepageData();
 ---
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<title>{data.title}</title>
-		<meta name="description" content={data.description} />
-	</head>
-	<body>
-		<ProposalThree
-			data={data}
-			secondaryHref="/rss.xml"
-			secondaryLabel="RSS feed"
-			titleLabel={data.title}
-			eyebrow="Shared course publishing"
-			kicker="Students write inside their assigned slug, open a pull request, and publish into one shared archive after instructor approval. The homepage now uses the Neon Broadcast system as the canonical design."
-		/>
-	</body>
-</html>
+<Layout description={data.description}>
+	<section class="shell homepage">
+		<header class="header">
+			<div>
+				<p class="label">Shared course publishing</p>
+				<p class="title">{data.title}</p>
+			</div>
+		</header>
+
+		<section class="hero">
+			<div class="hero-copy">
+				<p class="label">Shared domain transmission</p>
+				<h1>One publish pipeline for the whole class.</h1>
+				<p class="lead">
+					Students write inside their assigned slug, open a pull request, and publish into one shared
+					archive after instructor approval.
+				</p>
+				<div class="hero-links">
+					<a href="/students/">Directory</a>
+					<a href="/docs/">Student docs</a>
+					<a href="/rss.xml">RSS feed</a>
+				</div>
+			</div>
+			<div class="hero-metrics">
+				<div class="metric">
+					<span>Route</span>
+					<strong>{data.routeExample}</strong>
+				</div>
+				<div class="metric">
+					<span>Blogs</span>
+					<strong>{data.studentCount}</strong>
+				</div>
+				<div class="metric">
+					<span>Posts</span>
+					<strong>{data.postCount}</strong>
+				</div>
+			</div>
+		</section>
+
+		<section class="ticker" aria-label="Platform summary">
+			<span>Astro content collections</span>
+			<span>slug registry</span>
+			<span>ownership validation</span>
+			<span>instructor review</span>
+			<span>static deploy</span>
+		</section>
+
+		<section class="grid">
+			<article class="panel">
+				<p class="label">Workflow</p>
+				{data.workflow.map((step, index) => (
+					<div class="step">
+						<b>{String(index + 1).padStart(2, '0')}</b>
+						<p>{step}</p>
+					</div>
+				))}
+			</article>
+			<article class="panel">
+				<p class="label">Student edit surface</p>
+				<ul>
+					{data.editPaths.map((path) => (
+						<li>{path}</li>
+					))}
+				</ul>
+			</article>
+			<article class="panel">
+				<p class="label">Recent signals</p>
+				{data.recentPosts.map((post) => (
+					<a class="signal" href={post.postUrl}>
+						<strong>{post.title}</strong>
+						<span>{post.studentName} / {post.date}</span>
+					</a>
+				))}
+			</article>
+		</section>
+	</section>
+</Layout>
+
+<style>
+	.homepage {
+		padding: 1.4rem 0 1rem;
+	}
+
+	.header,
+	.hero,
+	.grid {
+		position: relative;
+	}
+
+	.header {
+		display: flex;
+		justify-content: space-between;
+		align-items: start;
+		gap: 1rem;
+	}
+
+	.label,
+	.metric span,
+	.step b,
+	.ticker span {
+		font-family: 'JetBrains Mono', monospace;
+		font-size: 0.8rem;
+		text-transform: uppercase;
+		letter-spacing: 0.12em;
+		color: #89a3c9;
+	}
+
+	.title {
+		margin: 0.35rem 0 0;
+		font-size: 1.2rem;
+		font-weight: 700;
+	}
+
+	.hero {
+		display: grid;
+		grid-template-columns: minmax(0, 1.2fr) minmax(18rem, 0.8fr);
+		gap: 1.2rem;
+		padding: 2.2rem 0 1.5rem;
+	}
+
+	.hero-copy h1 {
+		max-width: 8.2ch;
+		margin: 0.8rem 0 1rem;
+		font-size: clamp(4rem, 9vw, 7rem);
+		line-height: 0.9;
+		letter-spacing: -0.06em;
+	}
+
+	.lead {
+		max-width: 37rem;
+		margin: 0;
+		font-size: 1.1rem;
+		line-height: 1.7;
+		color: #c7d4f1;
+	}
+
+	.hero-links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.8rem;
+		margin-top: 1.4rem;
+	}
+
+	.hero-links a {
+		padding: 0.8rem 1rem;
+		border-radius: 999px;
+		border: 1px solid rgba(117, 153, 255, 0.24);
+		background: rgba(10, 16, 30, 0.62);
+		box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+		color: inherit;
+		text-decoration: none;
+	}
+
+	.hero-metrics {
+		display: grid;
+		gap: 0.9rem;
+	}
+
+	.metric,
+	.panel {
+		padding: 1rem;
+		border: 1px solid rgba(117, 153, 255, 0.24);
+		border-radius: 1.25rem;
+		background: rgba(9, 13, 24, 0.72);
+		backdrop-filter: blur(18px);
+		box-shadow: 0 0 40px rgba(16, 24, 48, 0.28);
+	}
+
+	.metric strong {
+		display: block;
+		margin-top: 0.5rem;
+		font-size: clamp(1.5rem, 3vw, 2.5rem);
+	}
+
+	.ticker {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+		padding: 0.85rem 1rem;
+		margin: 0.4rem 0 1.3rem;
+		border-top: 1px solid rgba(117, 153, 255, 0.24);
+		border-bottom: 1px solid rgba(117, 153, 255, 0.24);
+	}
+
+	.grid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 1rem;
+	}
+
+	.step {
+		display: grid;
+		grid-template-columns: 2.75rem 1fr;
+		gap: 0.7rem;
+		padding: 0.8rem 0;
+		border-top: 1px solid rgba(117, 153, 255, 0.16);
+	}
+
+	.panel ul {
+		display: grid;
+		gap: 0.85rem;
+		padding-left: 1.2rem;
+		color: #d0dcf5;
+	}
+
+	.signal {
+		display: grid;
+		gap: 0.2rem;
+		padding: 0.85rem 0;
+		border-top: 1px solid rgba(117, 153, 255, 0.16);
+		color: inherit;
+		text-decoration: none;
+	}
+
+	.signal span {
+		font-family: 'JetBrains Mono', monospace;
+		font-size: 0.82rem;
+		color: #89a3c9;
+	}
+
+	@media (max-width: 920px) {
+		.hero,
+		.grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

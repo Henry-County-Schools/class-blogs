@@ -2,7 +2,7 @@ export const siteConfig = {
 	title: 'Class Blogs',
 	description:
 		'A shared course publishing platform where each student contributes through one permanent subpath and instructor-reviewed pull requests.',
-	siteUrl: 'https://class-blogs.example.edu',
+	siteUrl: 'https://blogs.sow.care',
 	defaultAccent: '#61f4de',
 	navigation: [
 		{ href: '/', label: 'Course Hub' },
