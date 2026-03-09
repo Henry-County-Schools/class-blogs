@@ -1,46 +1,73 @@
-# Astro Starter Kit: Basics
+# Class Blogs
+
+This repository hosts a shared class blogging platform built with Astro. Every student gets one
+assigned slug and one canonical URL space:
+
+- `/students/{studentSlug}/`
+- `/students/{studentSlug}/{postSlug}/`
+
+The root site acts as the course hub, while students submit new posts through pull requests that are
+validated and reviewed before merge.
+
+## Local setup
+
+This project standardizes on `pnpm` and Node 22.
+
+Install `pnpm` with one of these approaches:
 
 ```sh
-pnpm create astro@latest -- --template basics
+corepack enable
+corepack prepare pnpm@10.31.0 --activate
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+or
 
-## 🚀 Project Structure
+```sh
+npm install -g pnpm
+```
 
-Inside of your Astro project, you'll see the following folders and files:
+Then install dependencies and start the dev server:
+
+```sh
+pnpm install
+pnpm dev
+```
+
+## Commands
+
+```sh
+pnpm dev
+pnpm build
+pnpm preview
+pnpm check
+pnpm validate:content
+pnpm validate:ownership --base <baseSha> --head <headSha>
+```
+
+## Content structure
 
 ```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
+src/content/
+├── students/
+│   └── {studentSlug}.json
+└── posts/
+    └── {studentSlug}/
+        └── YYYY-MM-DD-post-slug.md
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+Student pages and post pages are generated automatically from those content folders.
 
-## 🧞 Commands
+## Important paths
 
-All commands are run from the root of the project, from a terminal:
+- Student onboarding: `docs/student-blog-setup.md`
+- Slug rules: `docs/student-slug-policy.md`
+- Instructor workflow: `docs/instructor-operations.md`
+- Public student docs page: `/docs/`
+- Content schemas: `src/content/config.ts`
+- CI workflow: `.github/workflows/ci.yml`
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
+## Notes
 
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+- Students should only edit files within their assigned slug area.
+- Unpublished student profiles stay out of the public directory and route generation.
+- Branch protection should be configured in GitHub to require PRs, passing CI, and instructor review.

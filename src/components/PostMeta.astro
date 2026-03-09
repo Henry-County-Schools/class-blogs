@@ -1,0 +1,37 @@
+---
+import { formatDate } from '../lib/format';
+
+interface Props {
+	publishDate: Date;
+	updatedDate?: Date;
+	tags?: string[];
+	studentLabel?: string;
+	studentUrl?: string;
+}
+
+const { publishDate, updatedDate, tags = [], studentLabel, studentUrl } = Astro.props;
+---
+
+<div class="meta-row">
+	<span class="pill">{formatDate(publishDate, 'compact')}</span>
+	{updatedDate && <span class="pill">Updated {formatDate(updatedDate, 'compact')}</span>}
+	{studentLabel && (
+		<span class="pill">
+			{studentUrl ? <a href={studentUrl}>{studentLabel}</a> : studentLabel}
+		</span>
+	)}
+	{tags.map((tag) => (
+		<span class="pill">#{tag}</span>
+	))}
+</div>
+
+<style>
+	.pill a {
+		text-decoration: none;
+		color: inherit;
+	}
+
+	.pill a:visited {
+		color: inherit;
+	}
+</style>

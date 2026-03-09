@@ -1,0 +1,14 @@
+{
+  "slug": "gemma-turing",
+  "displayName": "Gemma Turing",
+  "githubUsername": "ai-sample-gemma-turing",
+  "bio": "AI-generated sample student profile for demonstration purposes. Gemma writes fake posts about algorithms, data structures, and why computational ideas feel elegant when explained clearly.",
+  "accentColor": "#ff51be",
+  "links": [
+    {
+      "label": "Student Setup Docs",
+      "url": "https://class-blogs.example.edu/docs/"
+    }
+  ],
+  "published": true
+}

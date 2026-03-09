@@ -2,13 +2,36 @@
   "name": "class-blogs",
   "type": "module",
   "version": "0.0.1",
+  "packageManager": "pnpm@10.31.0",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "check": "astro check",
+    "validate:content": "node ./scripts/validate-content.mjs",
+    "validate:ownership": "node ./scripts/validate-ownership.mjs",
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/rss": "^4.0.15",
+    "@fontsource/archivo": "^5.2.8",
+    "@fontsource/bricolage-grotesque": "^5.2.10",
+    "@fontsource/cormorant-garamond": "^5.2.11",
+    "@fontsource/dm-mono": "^5.2.7",
+    "@fontsource/jetbrains-mono": "^5.2.8",
+    "@fontsource/manrope": "^5.2.8",
+    "@fontsource/source-serif-4": "^5.2.9",
+    "@fontsource/space-grotesk": "^5.2.10",
+    "@fontsource/work-sans": "^5.2.8",
     "astro": "^5.17.1"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.6",
+    "@types/node": "^24.5.2",
+    "gray-matter": "^4.0.3",
+    "typescript": "^5.9.3"
+  },
+  "engines": {
+    "node": ">=20.0.0"
   }
 }

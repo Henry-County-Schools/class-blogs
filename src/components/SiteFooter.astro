@@ -1,0 +1,77 @@
+---
+import { siteConfig } from '../config/site';
+---
+
+<footer class="site-footer">
+	<div class="shell footer-inner">
+		<div>
+			<strong>{siteConfig.title}</strong>
+			<p>Built as one static Astro site with student-owned content folders and instructor-reviewed PRs.</p>
+		</div>
+		<div class="footer-links">
+			<a href="/students/">Student directory</a>
+			<a href="/docs/">Student docs</a>
+			<a href="/rss.xml">RSS feed</a>
+		</div>
+	</div>
+</footer>
+
+<style>
+	.site-footer {
+		position: relative;
+		z-index: 1;
+		padding: 1rem 1.5rem 2rem;
+	}
+
+	.footer-inner {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		gap: 1rem;
+		padding: 1.5rem;
+		border-top: 1px solid var(--line);
+		color: var(--muted);
+	}
+
+	.footer-inner p {
+		margin: 0.35rem 0 0;
+		max-width: 32rem;
+	}
+
+	.footer-links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1rem;
+		align-items: flex-start;
+	}
+
+	.footer-links a {
+		padding: 0.45rem 0.65rem;
+		border: 1px solid rgba(117, 153, 255, 0.16);
+		border-radius: 999px;
+		background: rgba(10, 16, 30, 0.58);
+		color: #bcd1f3;
+		text-decoration-thickness: 0.08em;
+		text-underline-offset: 0.16em;
+		text-decoration: none;
+	}
+
+	.footer-links a:visited {
+		color: #bcd1f3;
+	}
+
+	.footer-links a:hover {
+		color: #dffef6;
+		border-color: rgba(97, 244, 222, 0.24);
+	}
+
+	@media (max-width: 720px) {
+		.site-footer {
+			padding: 1rem 1rem 2rem;
+		}
+
+		.footer-inner {
+			padding: 1.25rem 0;
+		}
+	}
+</style>
