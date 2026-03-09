@@ -11,7 +11,13 @@ validated and reviewed before merge.
 
 ## Local setup
 
-This project standardizes on `pnpm` and Node 22.
+This project standardizes on `pnpm` and Node 24.
+
+Use `fnm` to install and activate the pinned Node version:
+
+```sh
+fnm use --install-if-missing
+```
 
 Install `pnpm` with one of these approaches:
 
