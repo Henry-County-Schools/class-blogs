@@ -26,7 +26,7 @@ Use `fnm` to install and activate the pinned Node version:
 fnm use --install-if-missing
 ```
 
-Install `pnpm` with one of these approaches:
+Install `pnpm`:
 
 ```sh
 corepack enable
