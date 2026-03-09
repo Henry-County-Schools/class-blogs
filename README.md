@@ -13,23 +13,25 @@ validated and reviewed before merge.
 
 This project standardizes on `pnpm` and Node 24.
 
+Add these two lines and fill your information in your `~/.zshrc` file:
+
+```sh
+export COREPACK_NPM_USERNAME=
+export COREPACK_NPM_PASSWORD=
+```
+
 Use `fnm` to install and activate the pinned Node version:
 
 ```sh
 fnm use --install-if-missing
 ```
 
-Install `pnpm` with one of these approaches:
+Install `pnpm`:
 
 ```sh
 corepack enable
-corepack prepare pnpm@10.31.0 --activate
-```
-
-or
-
-```sh
-npm install -g pnpm
+corepack install -g pnpm@10.31.0
+pnpm install
 ```
 
 Then install dependencies and start the dev server:
@@ -42,7 +44,7 @@ pnpm dev
 ## Commands
 
 ```sh
-pnpm dev
+pnpm dev --host
 pnpm build
 pnpm preview
 pnpm check
