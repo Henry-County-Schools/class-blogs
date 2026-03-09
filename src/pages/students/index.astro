@@ -1,0 +1,98 @@
+---
+import StudentCard from '../../components/StudentCard.astro';
+import { siteConfig } from '../../config/site';
+import Layout from '../../layouts/Layout.astro';
+import { getPostsByStudent, getPublishedPostEntries, getPublishedStudents } from '../../lib/content';
+
+const students = await getPublishedStudents();
+const posts = await getPublishedPostEntries();
+const cards = await Promise.all(
+	students.map(async (student) => ({
+		student,
+		postCount: (await getPostsByStudent(student.data.slug)).length,
+	})),
+);
+---
+
+<Layout title="Student Directory" description={`Published student blogs in ${siteConfig.title}.`}>
+	<section class="shell directory-page">
+		<div class="directory-hero panel">
+			<div class="section-heading">
+				<span class="eyebrow">Directory</span>
+				<h1 class="section-title">Published student blogs</h1>
+				<p class="section-copy">
+					Every published profile gets one stable home under <code>/students/{'{studentSlug}'}/</code>, with
+					posts generated automatically from Markdown files inside that slug's folder.
+				</p>
+			</div>
+			<div class="stats">
+				<div class="stat">
+					<span class="eyebrow">Published</span>
+					<strong>{students.length}</strong>
+				</div>
+				<div class="stat">
+					<span class="eyebrow">Posts</span>
+					<strong>{posts.length}</strong>
+				</div>
+			</div>
+		</div>
+		<div class="student-grid">
+			{cards.map(({ student, postCount }) => <StudentCard student={student} postCount={postCount} />)}
+		</div>
+	</section>
+</Layout>
+
+<style>
+	.directory-page {
+		display: grid;
+		gap: 1.4rem;
+		padding: 2rem 0 3rem;
+	}
+
+	.directory-hero {
+		display: grid;
+		grid-template-columns: minmax(0, 1.2fr) minmax(16rem, 0.75fr);
+		gap: 1rem;
+		padding: 1.25rem;
+	}
+
+	.section-heading {
+		display: grid;
+		gap: 1rem;
+	}
+
+	.stats {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 0.8rem;
+	}
+
+	.stat {
+		padding: 1rem;
+		border: 1px solid rgba(117, 153, 255, 0.16);
+		border-radius: 1.2rem;
+		background: rgba(8, 14, 28, 0.66);
+	}
+
+	.stat strong {
+		display: block;
+		margin-top: 0.55rem;
+		font-family: var(--display-font);
+		font-size: clamp(2rem, 5vw, 3rem);
+		line-height: 0.94;
+		letter-spacing: -0.04em;
+	}
+
+	.student-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+		gap: 1rem;
+	}
+
+	@media (max-width: 900px) {
+		.directory-hero,
+		.stats {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

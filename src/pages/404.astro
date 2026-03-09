@@ -1,0 +1,41 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Page Not Found" description="The requested page could not be found.">
+	<section class="shell not-found">
+		<div class="panel card">
+			<span class="eyebrow">404</span>
+			<h1 class="section-title">This page is not part of the course archive.</h1>
+			<p class="section-copy">
+				If you expected a student page here, check the slug or confirm that the profile is marked
+				`published: true`.
+			</p>
+			<div class="actions">
+				<a class="button-link" href="/">Return to the course hub</a>
+				<a class="button-link subtle" href="/students/">Open the directory</a>
+			</div>
+		</div>
+	</section>
+</Layout>
+
+<style>
+	.not-found {
+		display: grid;
+		place-items: center;
+		min-height: 70vh;
+	}
+
+	.card {
+		max-width: 42rem;
+		padding: 1.6rem;
+		background: rgba(8, 14, 28, 0.84);
+	}
+
+	.actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.85rem;
+		margin-top: 1.25rem;
+	}
+</style>

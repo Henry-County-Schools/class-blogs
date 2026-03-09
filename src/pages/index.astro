@@ -1,11 +1,30 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import '@fontsource/space-grotesk/500.css';
+import '@fontsource/space-grotesk/700.css';
+import '@fontsource/jetbrains-mono/400.css';
+import '@fontsource/jetbrains-mono/700.css';
+import ProposalThree from '../components/proposals/ProposalThree.astro';
+import { getProposalData } from '../lib/proposals';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const data = await getProposalData();
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>{data.title}</title>
+		<meta name="description" content={data.description} />
+	</head>
+	<body>
+		<ProposalThree
+			data={data}
+			secondaryHref="/rss.xml"
+			secondaryLabel="RSS feed"
+			titleLabel={data.title}
+			eyebrow="Shared course publishing"
+			kicker="Students write inside their assigned slug, open a pull request, and publish into one shared archive after instructor approval. The homepage now uses the Neon Broadcast system as the canonical design."
+		/>
+	</body>
+</html>

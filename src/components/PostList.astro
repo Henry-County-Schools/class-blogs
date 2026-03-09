@@ -1,0 +1,122 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { getPostSlug, getPostUrl, getPublishedStudentBySlug, getStudentSlugFromPost, getStudentUrl } from '../lib/content';
+import PostMeta from './PostMeta.astro';
+
+interface Props {
+	items: CollectionEntry<'posts'>[];
+	showStudent?: boolean;
+	emptyMessage?: string;
+}
+
+const { items, showStudent = false, emptyMessage = 'No posts available yet.' } = Astro.props;
+
+const postCards = await Promise.all(
+	items.map(async (post) => {
+		const studentSlug = getStudentSlugFromPost(post);
+		const student = showStudent ? await getPublishedStudentBySlug(studentSlug) : undefined;
+		return {
+			post,
+			studentLabel: student?.data.displayName ?? studentSlug,
+			studentUrl: getStudentUrl(studentSlug),
+		};
+	}),
+);
+---
+
+{
+	postCards.length > 0 ? (
+		<div class="post-list">
+			{postCards.map(({ post, studentLabel, studentUrl }) => (
+				<article class="post-card panel">
+					<div class="post-card-inner">
+						<div class="post-copy">
+							<p class="post-slug">{getPostSlug(post)}</p>
+							<h3>
+								<a href={getPostUrl(post)}>{post.data.title}</a>
+							</h3>
+							<p>{post.data.description}</p>
+						</div>
+						<PostMeta
+							publishDate={post.data.publishDate}
+							updatedDate={post.data.updatedDate}
+							tags={post.data.tags}
+							studentLabel={showStudent ? studentLabel : undefined}
+							studentUrl={showStudent ? studentUrl : undefined}
+						/>
+					</div>
+				</article>
+			))}
+		</div>
+	) : (
+		<p class="empty-state panel">{emptyMessage}</p>
+	)
+}
+
+<style>
+	.post-list {
+		display: grid;
+		gap: 1rem;
+	}
+
+	.post-card {
+		padding: 1.15rem 1.2rem;
+		background: rgba(10, 16, 30, 0.74);
+	}
+
+	.post-card-inner {
+		display: grid;
+		grid-template-columns: minmax(0, 1.35fr) minmax(13rem, 0.7fr);
+		gap: 1rem;
+		align-items: start;
+	}
+
+	.post-copy {
+		display: grid;
+		gap: 0.65rem;
+	}
+
+	.post-slug {
+		margin: 0;
+		font-family: var(--mono-font);
+		font-size: 0.84rem;
+		color: var(--muted);
+	}
+
+	h3 {
+		margin: 0;
+		font-family: var(--display-font);
+		font-size: clamp(1.55rem, 2.4vw, 2.3rem);
+		line-height: 0.96;
+		letter-spacing: -0.04em;
+	}
+
+	h3 a {
+		color: #f5f7ff;
+		text-decoration: none;
+	}
+
+	h3 a:visited {
+		color: #f5f7ff;
+	}
+
+	h3 a:hover {
+		color: #61f4de;
+	}
+
+	p {
+		margin: 0;
+		color: #d0dcf5;
+	}
+
+	.empty-state {
+		margin: 0;
+		padding: 1rem 1.1rem;
+	}
+
+	@media (max-width: 760px) {
+		.post-card-inner {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

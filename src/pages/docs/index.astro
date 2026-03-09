@@ -1,0 +1,631 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const progressSteps = ['Get your slug', 'Set up your profile', 'Write your post', 'Open your PR'];
+
+const slugRules = [
+	'lowercase only',
+	'letters, numbers, and hyphens only',
+	'no spaces',
+	'do not rename the slug after publishing unless the instructor handles the change',
+];
+
+const requiredProfileFields = ['slug', 'displayName', 'githubUsername', 'bio', 'published'];
+const optionalProfileFields = ['avatar', 'accentColor', 'links'];
+const optionalFrontmatter = ['updatedDate', 'tags'];
+
+const submitChecklist = [
+	'Confirm you edited only your own profile file, post files, and optional asset files.',
+	'Check links, spelling, and Markdown formatting.',
+	'Make sure the filename matches `YYYY-MM-DD-post-slug.md`.',
+	'Set `draft: false` only when the post is ready to publish.',
+	'Fill out the PR template with your slug and post title.',
+];
+
+const commonMistakes = [
+	'editing another student’s folder',
+	'mismatching the slug and the profile filename',
+	'using the wrong post filename pattern',
+	'forgetting required frontmatter fields',
+	'publishing a draft before the post is ready',
+];
+
+const frontmatterExample = `---
+title: "[AI Sample] My first post"
+description: "Short summary for the directory and RSS feed."
+publishDate: 2026-03-09
+tags:
+  - example
+  - intro
+draft: false
+---`;
+---
+
+<Layout title="Student Docs" description="Setup and writing instructions for student blogs.">
+	<section class="shell docs-page">
+			<header class="docs-hero panel" id="start-here">
+				<div class="hero-copy">
+					<span class="eyebrow">Student docs</span>
+					<h1 class="docs-title">Set up your blog and publish your first post</h1>
+				<p class="section-copy">
+					You will use one assigned slug. You only edit files inside that slug. You publish by opening
+					a pull request.
+				</p>
+				<p class="hero-note">Use this page for first-time setup now and quick reference later.</p>
+			</div>
+			<div class="hero-actions">
+				<a class="button-link" href="/students/">Browse published blogs</a>
+				<a class="button-link subtle" href="/">Return to homepage</a>
+			</div>
+				<ol class="progress-rail" aria-label="Publishing steps">
+					{progressSteps.map((step, index) => (
+						<li class="progress-step">
+							<strong>{String(index + 1).padStart(2, '0')}</strong>
+							<span>{step}</span>
+						</li>
+					))}
+				</ol>
+			</header>
+
+			<div class="docs-layout">
+				<aside class="docs-toc panel">
+					<p class="toc-title">On this page</p>
+					<nav aria-label="Docs sections">
+						<a class="toc-link" href="#start-here">Start Here</a>
+						<a class="toc-link" href="#quick-start">Quick Start Checklist</a>
+						<a class="toc-link" href="#reference">Reference</a>
+						<a class="toc-link" href="#submit">Before You Submit</a>
+						<a class="toc-link" href="#help">Need More Detail?</a>
+					</nav>
+				</aside>
+
+				<div class="docs-content">
+					<section class="docs-section" id="quick-start">
+						<div class="section-header">
+							<span class="eyebrow">Quick start</span>
+							<h2 class="section-title">Do these steps in order</h2>
+							<p class="section-copy">
+								This is the shortest path from getting a slug to opening your first pull request.
+							</p>
+						</div>
+						<ol class="action-list panel">
+							<li>
+								<strong>01</strong>
+								<div>
+									<h3>Confirm your slug</h3>
+									<p>
+										Ask your instructor for your assigned <code>studentSlug</code>. You will use this
+										same slug in your profile path, post folder, and public URL.
+									</p>
+								</div>
+							</li>
+							<li>
+								<strong>02</strong>
+								<div>
+									<h3>Open your profile file</h3>
+									<p>
+										Edit <code>src/content/students/{'{studentSlug}'}.json</code> and keep the filename
+										matched to your assigned slug.
+									</p>
+								</div>
+							</li>
+							<li>
+								<strong>03</strong>
+								<div>
+									<h3>Update your profile fields</h3>
+									<p>
+										Fill in your <code>displayName</code>, <code>githubUsername</code>, <code>bio</code>,
+										and publication status. Do not change <code>slug</code>.
+									</p>
+								</div>
+							</li>
+							<li>
+								<strong>04</strong>
+								<div>
+									<h3>Add your post file</h3>
+									<p>
+										Create a Markdown file in <code>src/content/posts/{'{studentSlug}'}/</code>.
+									</p>
+								</div>
+							</li>
+							<li>
+								<strong>05</strong>
+								<div>
+									<h3>Check the filename pattern</h3>
+									<p>
+										Name the file <code>YYYY-MM-DD-post-slug.md</code> so the generated route is stable.
+									</p>
+								</div>
+							</li>
+							<li>
+								<strong>06</strong>
+								<div>
+									<h3>Fill in frontmatter</h3>
+									<p>
+										Add <code>title</code>, <code>description</code>, <code>publishDate</code>, and{' '}
+										<code>draft</code>. Add optional tags or an update date if needed.
+									</p>
+								</div>
+							</li>
+							<li>
+								<strong>07</strong>
+								<div>
+									<h3>Open your pull request</h3>
+									<p>
+										Submit a PR with your slug and post title. CI and instructor review are the
+										publishing gate.
+									</p>
+								</div>
+							</li>
+						</ol>
+					</section>
+
+				<section class="docs-section" id="reference">
+					<div class="section-header">
+						<span class="eyebrow">Reference</span>
+						<h2 class="section-title">Look up the exact rule you need</h2>
+						<p class="section-copy">
+							Use these sections when you need a file path, naming rule, or frontmatter reminder.
+						</p>
+					</div>
+
+					<div class="reference-list">
+						<section class="reference-group" id="slug-rules">
+							<h3>Slug rules</h3>
+							<ul>
+								{slugRules.map((rule) => (
+									<li>{rule}</li>
+								))}
+							</ul>
+							<p class="inline-note">
+								Generated URL pattern: <code>/students/{'{studentSlug}'}/</code> and{' '}
+								<code>/students/{'{studentSlug}'}/{'{postSlug}'}/</code>
+							</p>
+						</section>
+
+						<section class="reference-group" id="allowed-files">
+							<h3>Files you may edit</h3>
+							<ul class="path-list">
+								<li><code>src/content/students/{'{studentSlug}'}.json</code></li>
+								<li><code>src/content/posts/{'{studentSlug}'}/YYYY-MM-DD-post-slug.md</code></li>
+								<li><code>public/student-assets/{'{studentSlug}'}/</code> if your class uses assets</li>
+							</ul>
+						</section>
+
+						<section class="reference-group" id="profile-fields">
+							<h3>Profile fields</h3>
+							<div class="field-columns">
+								<div>
+									<p class="field-label">Required</p>
+									<ul>
+										{requiredProfileFields.map((field) => (
+											<li><code>{field}</code></li>
+										))}
+									</ul>
+								</div>
+								<div>
+									<p class="field-label">Optional</p>
+									<ul>
+										{optionalProfileFields.map((field) => (
+											<li><code>{field}</code></li>
+										))}
+									</ul>
+								</div>
+							</div>
+						</section>
+
+						<section class="reference-group" id="post-filename">
+							<h3>Post filename pattern</h3>
+							<pre><code>src/content/posts/{'{studentSlug}'}/YYYY-MM-DD-post-slug.md</code></pre>
+							<p class="inline-note">Example output URL: <code>/students/student-slug/first-post/</code></p>
+						</section>
+
+						<section class="reference-group" id="frontmatter">
+							<h3>Frontmatter requirements</h3>
+							<p class="field-label">Required fields</p>
+							<ul class="inline-list">
+								<li><code>title</code></li>
+								<li><code>description</code></li>
+								<li><code>publishDate</code></li>
+								<li><code>draft</code></li>
+							</ul>
+							<p class="field-label">Optional fields</p>
+							<ul class="inline-list">
+								{optionalFrontmatter.map((field) => (
+									<li><code>{field}</code></li>
+								))}
+							</ul>
+							<pre><code>{frontmatterExample}</code></pre>
+						</section>
+					</div>
+				</section>
+
+				<section class="docs-section" id="submit">
+					<div class="section-header">
+						<span class="eyebrow">Before you submit</span>
+						<h2 class="section-title">Check these before opening your PR</h2>
+					</div>
+					<div class="submit-grid">
+						<section class="panel submit-card">
+							<h3>PR checklist</h3>
+							<ul>
+								{submitChecklist.map((item) => (
+									<li>{item}</li>
+								))}
+							</ul>
+						</section>
+						<section class="panel submit-card">
+							<h3>Common mistakes</h3>
+							<ul>
+								{commonMistakes.map((mistake) => (
+									<li>{mistake}</li>
+								))}
+							</ul>
+							<p class="warning-note">CI will fail if you edit files outside your assigned slug area.</p>
+						</section>
+					</div>
+				</section>
+
+				<section class="docs-section" id="help">
+					<div class="section-header">
+						<span class="eyebrow">Need more detail?</span>
+						<h2 class="section-title">Use these links when you need more context</h2>
+					</div>
+						<div class="help-links panel">
+							<a href="/students/">Browse published student blogs</a>
+							<a href="#reference">Jump back to the reference section</a>
+							<p>Ask your instructor if you do not know your assigned slug yet.</p>
+						</div>
+				</section>
+			</div>
+		</div>
+	</section>
+</Layout>
+
+	<style>
+		.docs-page {
+			display: grid;
+			gap: 2rem;
+			padding: 2rem 0 3rem;
+		}
+
+		.docs-hero {
+			display: grid;
+			gap: 1.5rem;
+			padding: 1.4rem;
+			background: rgba(8, 14, 28, 0.82);
+		}
+
+	.hero-copy {
+		display: grid;
+		gap: 1rem;
+	}
+
+		.docs-title {
+			margin: 0;
+			font-family: var(--display-font);
+			font-size: clamp(2.2rem, 3.6vw, 3.4rem);
+			line-height: 1;
+			letter-spacing: -0.05em;
+			max-width: 16ch;
+		}
+
+	.hero-note {
+		margin: 0;
+		color: var(--muted);
+	}
+
+	.hero-actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.8rem;
+	}
+
+		.progress-rail {
+			display: grid;
+			grid-template-columns: repeat(4, minmax(0, 1fr));
+			gap: 1rem;
+			padding: 0;
+			margin: 0;
+			list-style: none;
+		}
+
+		.progress-step {
+			display: grid;
+			gap: 0.45rem;
+			padding: 1rem 1rem 0.95rem;
+			border: 1px solid rgba(117, 153, 255, 0.14);
+			border-radius: 1rem;
+			background: rgba(10, 16, 30, 0.56);
+		}
+
+	.progress-step strong,
+	.action-list strong,
+	.field-label,
+	.warning-note {
+		font-family: var(--mono-font);
+		font-size: 0.8rem;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: #61f4de;
+	}
+
+		.progress-step span {
+			color: #d0dcf5;
+			font-size: 0.98rem;
+			line-height: 1.35;
+		}
+
+		.docs-layout {
+			display: grid;
+			grid-template-columns: minmax(13rem, 15rem) minmax(0, 1fr);
+			gap: 2rem;
+			align-items: start;
+		}
+
+		.docs-toc {
+			position: sticky;
+			top: 1rem;
+			align-self: start;
+			padding: 1rem;
+			background: rgba(8, 14, 28, 0.76);
+		}
+
+	.toc-title {
+		margin: 0 0 0.85rem;
+		font-family: var(--mono-font);
+		font-size: 0.8rem;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--muted);
+	}
+
+		.docs-toc nav {
+			display: flex;
+			flex-direction: column;
+			gap: 0.55rem;
+		}
+
+		.toc-link {
+			display: block;
+			padding: 0.5rem 0.7rem;
+			border-radius: 0.9rem;
+			border: 1px solid rgba(117, 153, 255, 0.14);
+			background: rgba(10, 16, 30, 0.52);
+			color: #d0dcf5;
+			text-decoration: none;
+			font-size: 0.95rem;
+			font-weight: 500;
+			transition:
+				border-color 160ms ease,
+				background-color 160ms ease,
+				color 160ms ease,
+				transform 160ms ease;
+		}
+
+		.toc-link:hover,
+		.toc-link:focus-visible {
+			color: #f5f7ff;
+			background: rgba(18, 28, 51, 0.86);
+			border-color: rgba(97, 244, 222, 0.32);
+			transform: translateX(2px);
+		}
+
+		.docs-content {
+			display: grid;
+			gap: 2.5rem;
+			min-width: 0;
+		}
+
+		.docs-section {
+			display: grid;
+			gap: 1rem;
+			scroll-margin-top: 1.25rem;
+		}
+
+		.section-header {
+			display: grid;
+			gap: 0.85rem;
+			padding-bottom: 1.15rem;
+			border-bottom: 1px solid rgba(117, 153, 255, 0.16);
+		}
+
+		.docs-section .section-title {
+			font-size: clamp(2rem, 3.2vw, 3rem);
+			line-height: 0.98;
+		}
+
+		.action-list {
+			display: grid;
+			gap: 0;
+		padding: 0;
+		margin: 0;
+		list-style: none;
+	}
+
+		.action-list li {
+			display: grid;
+			grid-template-columns: 3rem 1fr;
+			gap: 1rem;
+			padding: 1rem 1.15rem;
+			border-top: 1px solid rgba(117, 153, 255, 0.14);
+		}
+
+	.action-list li:first-child {
+		border-top: 0;
+	}
+
+		.action-list h3 {
+			margin: 0 0 0.35rem;
+			font-family: var(--display-font);
+			font-size: 1.15rem;
+			letter-spacing: -0.03em;
+		}
+
+		.action-list p {
+			margin: 0;
+			color: #d0dcf5;
+		}
+
+	.reference-list {
+		display: grid;
+		gap: 1.25rem;
+	}
+
+	.reference-group {
+		display: grid;
+		gap: 0.8rem;
+		padding-bottom: 1.2rem;
+		border-bottom: 1px solid rgba(117, 153, 255, 0.16);
+	}
+
+	.reference-group:last-child {
+		padding-bottom: 0;
+		border-bottom: 0;
+	}
+
+	.reference-group h3,
+	.submit-card h3 {
+		margin: 0;
+		font-family: var(--display-font);
+		font-size: 1.7rem;
+		line-height: 1;
+		letter-spacing: -0.04em;
+	}
+
+	.reference-group p,
+	.reference-group li,
+	.submit-card li,
+	.help-links p {
+		color: #d0dcf5;
+	}
+
+	.path-list,
+	.reference-group ul,
+	.submit-card ul {
+		display: grid;
+		gap: 0.65rem;
+		margin: 0;
+		padding-left: 1.2rem;
+	}
+
+	.field-columns {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 1rem;
+	}
+
+	.inline-list {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.7rem;
+		padding: 0;
+		margin: 0;
+		list-style: none;
+	}
+
+	.inline-list li {
+		padding: 0.32rem 0.6rem;
+		border: 1px solid rgba(117, 153, 255, 0.16);
+		border-radius: 999px;
+		background: rgba(10, 16, 30, 0.58);
+	}
+
+		pre {
+			margin: 0;
+			padding: 1rem;
+			border-radius: 1rem;
+		border: 1px solid rgba(117, 153, 255, 0.16);
+		background: rgba(5, 9, 19, 0.9);
+		overflow-x: auto;
+	}
+
+		code {
+			font-family: var(--mono-font);
+			font-size: 0.92em;
+		}
+
+		p code,
+		li code,
+		.inline-note code {
+			padding: 0.12rem 0.35rem;
+			border-radius: 0.45rem;
+			background: rgba(18, 28, 51, 0.95);
+			color: #dffef6;
+		}
+
+	.inline-note {
+		margin: 0;
+		color: var(--muted);
+	}
+
+	.submit-grid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 1rem;
+	}
+
+	.submit-card,
+	.help-links {
+		padding: 1.15rem;
+	}
+
+	.help-links {
+		display: grid;
+		gap: 0.8rem;
+	}
+
+		.help-links a {
+			width: fit-content;
+			color: #dffef6;
+			text-decoration-thickness: 0.08em;
+			text-underline-offset: 0.16em;
+	}
+
+	.warning-note {
+		margin: 0.85rem 0 0;
+	}
+
+		@media (max-width: 980px) {
+			.progress-rail,
+			.field-columns,
+			.submit-grid {
+				grid-template-columns: 1fr;
+			}
+
+			.docs-layout {
+				grid-template-columns: 1fr;
+				gap: 1rem;
+			}
+
+			.docs-toc {
+				position: static;
+			}
+
+			.docs-toc nav {
+				display: grid;
+				grid-template-columns: repeat(2, minmax(0, 1fr));
+			}
+		}
+
+	@media (max-width: 720px) {
+		.docs-page {
+			padding: 1.5rem 0 2rem;
+		}
+
+		.hero-actions,
+		.docs-toc nav {
+			display: grid;
+			grid-template-columns: 1fr;
+		}
+
+		.action-list li {
+			grid-template-columns: 1fr;
+		}
+
+		.inline-list {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+		}
+	}
+</style>

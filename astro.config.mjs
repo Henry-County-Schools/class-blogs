@@ -1,5 +1,8 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 
-// https://astro.build/config
-export default defineConfig({});
+const site = process.env.SITE_URL ?? 'https://class-blogs.example.edu';
+
+export default defineConfig({
+	site,
+});

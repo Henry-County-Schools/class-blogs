@@ -1,0 +1,77 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { getStudentAccent, getStudentUrl } from '../lib/content';
+
+interface Props {
+	student: CollectionEntry<'students'>;
+	postCount?: number;
+}
+
+const { student, postCount } = Astro.props;
+const accent = getStudentAccent(student);
+---
+
+<article class="student-card panel" style={`--student-accent: ${accent};`}>
+	<div class="card-top">
+		<span class="slug-badge">/{student.data.slug}</span>
+		{postCount !== undefined && <span class="pill">{postCount} posts</span>}
+	</div>
+	<h3>{student.data.displayName}</h3>
+	<p>{student.data.bio}</p>
+	<div class="card-bottom">
+		<a href={getStudentUrl(student.data.slug)}>Open blog</a>
+		<span>@{student.data.githubUsername}</span>
+	</div>
+</article>
+
+<style>
+	.student-card {
+		display: grid;
+		gap: 1rem;
+		padding: 1.25rem;
+		background:
+			linear-gradient(180deg, rgba(10, 16, 30, 0.88), rgba(7, 11, 22, 0.92)),
+			color-mix(in srgb, var(--student-accent) 10%, transparent);
+	}
+
+	.card-top,
+	.card-bottom {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 0.7rem;
+	}
+
+	.slug-badge {
+		font-family: var(--mono-font);
+		font-size: 0.85rem;
+		font-weight: 700;
+		color: color-mix(in srgb, var(--student-accent) 70%, var(--ink) 30%);
+	}
+
+	h3 {
+		margin: 0;
+		font-family: var(--display-font);
+		font-size: 1.85rem;
+		line-height: 0.96;
+		letter-spacing: -0.04em;
+	}
+
+	p {
+		margin: 0;
+		color: #cfdbf5;
+	}
+
+	.card-bottom {
+		color: var(--muted);
+		font-size: 0.92rem;
+	}
+
+	.card-bottom a {
+		font-weight: 700;
+		text-decoration-thickness: 0.08em;
+		text-underline-offset: 0.15em;
+		color: #dffef6;
+	}
+</style>
