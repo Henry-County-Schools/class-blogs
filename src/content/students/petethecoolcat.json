@@ -1,9 +1,9 @@
 {
-  "slug": "claude-shannon",
-  "displayName": "Claude Shannon",
-  "githubUsername": "ai-sample-claude-shannon",
-  "bio": "AI-generated sample student profile for demonstration purposes. Claude writes fake posts about systems, theory, and the places where abstractions meet hardware reality.",
-  "accentColor": "#61f4de",
+  "slug": "petethecoolcat",
+  "displayName": "Blue Braveheart",
+  "githubUsername": "petethecoolcat",
+  "bio": "I am a great coder (not clickbait)",
+  "accentColor": "#71a3f5",
   "links": [
     {
       "label": "Sample Student Guide",
