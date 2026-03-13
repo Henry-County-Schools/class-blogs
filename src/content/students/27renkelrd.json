@@ -1,0 +1,14 @@
+{
+  "slug": "ryan-renkel",
+  "displayName": "Ryan Renkel",
+  "githubUsername": "27renkelrd",
+  "bio": "I make pizza for 11 dollars an hour",
+  "accentColor": "#61f4de",
+  "links": [
+    {
+      "label": "Sample Student Guide",
+      "url": "https://blogs.sow.care/docs/"
+    }
+  ],
+  "published": false
+}
