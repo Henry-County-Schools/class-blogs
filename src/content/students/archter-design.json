@@ -1,0 +1,14 @@
+{
+  "slug": "archter-design",
+  "displayName": "Jeremy Fitzgerald",
+  "githubUsername": "archter-design",
+  "bio": "I love robots and being a nightguard.",
+  "accentColor": "#EDC001",
+  "links": [
+    {
+      "label": "Sample Student Guide",
+      "url": "https://blogs.sow.care/docs/"
+    }
+  ],
+  "published": true
+}
