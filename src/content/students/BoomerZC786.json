@@ -1,0 +1,14 @@
+{
+  "slug": "BoomerZC",
+  "displayName": "Alan Turing",
+  "githubUsername": "BoomerZC786",
+  "bio": "I love playing sports!",
+  "accentColor": "#ff51be",
+  "links": [
+    {
+      "label": "Student Setup Docs",
+      "url": "https://blogs.sow.care/docs/"
+    }
+  ],
+  "published": true
+}
