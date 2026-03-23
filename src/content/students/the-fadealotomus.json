@@ -1,0 +1,14 @@
+{
+  "slug": "the-fadealotomus",
+  "displayName": "THE Fadealotomus",
+  "githubUsername": "the-fadealotomus",
+  "bio": "As the name states, I, in fact and alone, AM the fadealotomus.",
+  "accentColor": "#DC143C",
+  "links": [
+    {
+      "label": "Student Setup Docs",
+      "url": "https://blogs.sow.care/docs/"
+    }
+  ],
+  "published": true
+}
