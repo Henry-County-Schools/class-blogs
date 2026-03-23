@@ -1,0 +1,14 @@
+{
+  "slug": "ViperTitanFall2",
+  "displayName": "ViperTitanFall2",
+  "githubUsername": "ViperTitanFall2",
+  "bio": "I like manga, video games, and computer science.",
+  "accentColor": "#40b010",
+  "links": [
+    {
+      "label": "Sample Student Guide",
+      "url": "https://blogs.sow.care/docs/"
+    }
+  ],
+  "published": true
+}
