@@ -1,0 +1,11 @@
+---
+title: "[AI Sample] Hash tables and the promise of average time"
+description: "AI-generated sample post about why hash tables feel magical in class and more conditional in real systems."
+publishDate: 2026-03-04
+tags:
+  - ai-sample
+  - data-structures
+  - hashing
+draft: false
+---
+## This is my article
