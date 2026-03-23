@@ -3,9 +3,9 @@ title: "Initial Post"
 description: "This is a very annoying project"
 publishDate: 13/03/2026
 tags:
-  - ai-sample
-  - algorithms
-  - graphs
+  - sigma
+  - chitlens
+  - Rizz
 draft: false
 ---
 
