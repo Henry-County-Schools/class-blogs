@@ -1,0 +1,14 @@
+{
+  "slug": "MonsterMan91",
+  "displayName": "Man of Monster",
+  "githubUsername": "MonsterMan91",
+  "bio": "I want to learn more about computer science.",
+  "accentColor": "#000000",
+  "links": [
+    {
+      "label": "Student Setup Docs",
+      "url": "https://blogs.sow.care/docs/"
+    }
+  ],
+  "published": true
+}
