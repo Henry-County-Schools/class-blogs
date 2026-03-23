@@ -1,0 +1,14 @@
+{
+  "slug": "togore-dreemurr",
+  "displayName": "Togore",
+  "githubUsername": "Togore-Dreemurr",
+  "bio": "Togore",
+  "accentColor": "#00ffff",
+  "links": [
+    {
+      "label": "Student Setup Docs",
+      "url": "https://blogs.sow.care/docs/"
+    }
+  ],
+  "published": true
+}
