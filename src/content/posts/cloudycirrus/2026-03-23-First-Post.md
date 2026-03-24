@@ -11,4 +11,8 @@ draft: false
 
 ## This is my article
 
-I'm very excited to learn more about Astro.
+Welcome to my first weekly blog post! Within these blogs I will summarize about what I've been learning about in my computer science 2 class. I will also provide some of my opinions about what we are learning as well.
+
+This week we just returned from spring break, so we really did not have anything that was too "new" to us to learn. Prior to the break we were working on getting Astroblog up and running correctly. Like with any new project within this class, there were several problems at first. We all followed directions within a Google doc that our teacher posted listing the directions to set up Astro and Astroblog, but many of us ran into problems. I ran into many problems as myself because I often got ahead of the steps. I was pretty worried, but that was only for the tutorial. I remember making a separate file and repo for my tutorial blog, but we moved on as a class to the actual project all together. 
+
+Prior to the break, my teacher made a class blogs repo for all of us to clone and open in Zed and the terminal.
