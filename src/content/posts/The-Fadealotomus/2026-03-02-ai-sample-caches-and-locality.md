@@ -1,6 +1,6 @@
 ---
 title: "THE Fadealotomus's Initial Post"
-description: "Sample post to get out the first of many."
+description: "First actual post."
 publishDate: 2026-03-27
 tags:
   - Weekly Work
