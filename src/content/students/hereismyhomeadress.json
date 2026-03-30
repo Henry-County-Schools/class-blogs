@@ -1,0 +1,14 @@
+{
+  "slug": "hereismyhomeadress",
+  "displayName": "Heidi N Closet",
+  "githubUsername": "hereismyhomeadress",
+  "bio": "worlds best at something",
+  "accentColor": "#61f4de",
+  "links": [
+    {
+      "label": "Sample Student Guide",
+      "url": "https://blogs.sow.care/docs/"
+    }
+  ],
+  "published": true
+}
