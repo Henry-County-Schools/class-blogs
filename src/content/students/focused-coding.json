@@ -1,0 +1,14 @@
+{
+  "slug": "focused-coding",
+  "displayName": "Focused",
+  "githubUsername": "focused-coding",
+  "bio": "I like to work!",
+  "accentColor": "#61f4de",
+  "links": [
+    {
+      "label": "Sample Student Guide",
+      "url": "https://blogs.sow.care/docs/"
+    }
+  ],
+  "published": true
+}
