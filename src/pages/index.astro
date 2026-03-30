@@ -5,8 +5,11 @@ import "@fontsource/space-grotesk/700.css";
 import "@fontsource/jetbrains-mono/400.css";
 import "@fontsource/jetbrains-mono/700.css";
 import { getHomepageData } from "../lib/homepage";
+import Navigation from "../components/Navigation.astro";
+import "../styles/global.css"
 
 const data = await getHomepageData();
+const pageTitle = "Home Page";
 ---
 
 <Layout description={data.description}>
