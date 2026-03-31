@@ -1,6 +1,7 @@
 const platform = "github";
 const username = "withastro";
+import Social from "./Social.astro";
 
 <footer>
-  <p>&copy; <a href="https://github.com/<%= platform %>"><%= platform %></a></p>
+  <p>&copy; <Social platform={platform} username={username} /></p>
 </footer>
