@@ -1,2 +1,2 @@
 [build]
-  command = "rm .npmrc"
+  command = "pnpm config set registry https://registry.npmjs.org && pnpm install && pnpm build"
