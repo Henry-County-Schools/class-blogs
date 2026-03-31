@@ -7,8 +7,12 @@ export type PostEntry = CollectionEntry<"posts">;
 
 const markdownExtensionPattern = /\.(md|mdx)$/i;
 
+export function normalizeStudentSlug(studentSlug: string) {
+  return studentSlug.toLowerCase();
+}
+
 export function getStudentUrl(studentSlug: string) {
-  return `/students/${studentSlug}/`;
+  return `/students/${normalizeStudentSlug(studentSlug)}/`;
 }
 
 export function getStudentSlugFromPost(post: PostEntry) {
@@ -16,7 +20,7 @@ export function getStudentSlugFromPost(post: PostEntry) {
   if (!studentSlug) {
     throw new Error(`Unable to derive student slug from post id "${post.id}".`);
   }
-  return studentSlug;
+  return normalizeStudentSlug(studentSlug);
 }
 
 export function getPostStem(post: PostEntry) {
@@ -55,12 +59,16 @@ export async function getPublishedStudents() {
     .sort((left, right) =>
       left.data.displayName.localeCompare(right.data.displayName),
     )
-    .map((student) => ({ ...student, slug: student.data.slug }));
+    .map((student) => ({
+      ...student,
+      slug: normalizeStudentSlug(student.data.slug),
+    }));
 }
 
 export async function getPublishedStudentBySlug(studentSlug: string) {
+  const normalizedStudentSlug = normalizeStudentSlug(studentSlug);
   const students = await getPublishedStudents();
-  return students.find((student) => student.slug === studentSlug);
+  return students.find((student) => student.slug === normalizedStudentSlug);
 }
 
 export async function getPublishedPostEntries() {
@@ -80,8 +88,11 @@ export async function getPublishedPostEntries() {
 }
 
 export async function getPostsByStudent(studentSlug: string) {
+  const normalizedStudentSlug = normalizeStudentSlug(studentSlug);
   const posts = await getPublishedPostEntries();
-  return posts.filter((post) => getStudentSlugFromPost(post) === studentSlug);
+  return posts.filter(
+    (post) => getStudentSlugFromPost(post) === normalizedStudentSlug,
+  );
 }
 
 export async function getPublishedPostByParams(

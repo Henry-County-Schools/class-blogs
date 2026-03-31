@@ -5,13 +5,14 @@ import {
 	getPublishedStudents,
 	getStudentSlugFromPost,
 	getStudentUrl,
+	normalizeStudentSlug,
 } from './content';
 import { formatDate } from './format';
 
 export async function getHomepageData() {
 	const students = await getPublishedStudents();
 	const posts = await getPublishedPostEntries();
-	const studentMap = new Map(students.map((student) => [student.data.slug, student]));
+	const studentMap = new Map(students.map((student) => [normalizeStudentSlug(student.data.slug), student]));
 
 	const recentPosts = posts.slice(0, 4).map((post) => {
 		const studentSlug = getStudentSlugFromPost(post);

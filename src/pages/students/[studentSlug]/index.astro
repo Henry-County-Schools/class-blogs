@@ -1,18 +1,23 @@
 ---
 import PostList from '../../../components/PostList.astro';
 import Layout from '../../../layouts/Layout.astro';
-import { getPostsByStudent, getPublishedStudents, getStudentAccent, getStudentUrl } from '../../../lib/content';
+import {
+	getPostsByStudent,
+	getPublishedStudents,
+	getStudentAccent,
+	getStudentUrl,
+} from '../../../lib/content';
 
 export async function getStaticPaths() {
 	const students = await getPublishedStudents();
 	return students.map((student) => ({
-		params: { studentSlug: student.data.slug },
+		params: { studentSlug: student.slug },
 		props: { student },
 	}));
 }
 
 const { student } = Astro.props;
-const posts = await getPostsByStudent(student.data.slug);
+const posts = await getPostsByStudent(student.slug);
 const accent = getStudentAccent(student);
 const profileLinks = student.data.links ?? [];
 ---
@@ -22,14 +27,14 @@ const profileLinks = student.data.links ?? [];
 		<div class="profile panel">
 			<div class="profile-heading">
 				<span class="eyebrow">Student blog</span>
-				<p class="slug">/{student.data.slug}</p>
+				<p class="slug">/{student.slug}</p>
 			</div>
 			<h1 class="section-title">{student.data.displayName}</h1>
 			<p class="section-copy">{student.data.bio}</p>
 			<div class="meta-row">
 				<span class="pill">@{student.data.githubUsername}</span>
 				<span class="pill">{posts.length} published posts</span>
-				<a class="pill" href={getStudentUrl(student.data.slug)}>
+				<a class="pill" href={getStudentUrl(student.slug)}>
 					Canonical URL
 				</a>
 			</div>
