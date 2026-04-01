@@ -1,11 +1,11 @@
 import { defineCollection, z } from 'astro:content';
 
-const slugPattern = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const slugPattern = /^[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*$/;
 const githubUsernamePattern = /^[A-Za-z0-9](?:[A-Za-z0-9-]{0,38})$/;
 const accentPattern = /^#(?:[0-9a-fA-F]{3}){1,2}$/;
 
 export const studentSchema = z.object({
-	slug: z.string().regex(slugPattern, 'Use lowercase letters, numbers, and hyphens only.'),
+	slug: z.string().regex(slugPattern, 'Use letters, numbers, and hyphens only.'),
 	displayName: z.string().min(1),
 	githubUsername: z
 		.string()
