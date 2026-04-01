@@ -1,0 +1,5 @@
+[build]
+  command = "pnpm build"
+
+[build.environment]
+  NPM_CONFIG_REGISTRY = "https://registry.npmjs.org/"
