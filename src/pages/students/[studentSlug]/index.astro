@@ -24,8 +24,9 @@ const profileLinks = student.data.links ?? [];
 ---
 
 <Layout title={student.data.displayName} description={student.data.bio} accent={accent}>
-	<section class="shell student-page">
-		<header class="profile-header" style={`background: linear-gradient(180deg, ${accent}15 0%, transparent 100%);`}>
+	<!-- Full-width header with gradient background -->
+	<header class="profile-header" style={`background: linear-gradient(180deg, ${accent}15 0%, transparent 100%);`}>
+		<div class="shell">
 			<div class="profile-container">
 				<div class="profile-avatar-section">
 					<div class="avatar-glow" style={`background: ${accent};`}></div>
@@ -44,8 +45,10 @@ const profileLinks = student.data.links ?? [];
 					</div>
 				</div>
 			</div>
-		</header>
+		</div>
+	</header>
 
+	<section class="shell student-page">
 		<section class="blog-content">
 			<h2 class="section-title">Recent Writings</h2>
 			<PostList 
@@ -75,20 +78,22 @@ const profileLinks = student.data.links ?? [];
 </Layout>
 
 <style>
-	.student-page {
-		padding: 0 0 3rem;
+	/* Full-width header that extends to edges */
+	.profile-header {
+		padding: 4rem 0;
+		margin-bottom: 2rem;
+		width: 100%;
+		position: relative;
 	}
 
-	/* Profile Header */
-	.profile-header {
-		padding: 4rem 2rem;
-		position: relative;
-		margin-bottom: 2rem;
+	/* The shell inside provides the constrained content */
+	.profile-header .shell {
+		max-width: 1100px;
+		margin: 0 auto;
+		padding: 0 2rem;
 	}
 
 	.profile-container {
-		max-width: 900px;
-		margin: 0 auto;
 		display: flex;
 		align-items: center;
 		gap: 3rem;
@@ -196,11 +201,13 @@ const profileLinks = student.data.links ?? [];
 		letter-spacing: 1px;
 	}
 
-	/* Blog Content */
+	/* Rest of the content */
+	.student-page {
+		padding: 0 0 3rem;
+	}
+
 	.blog-content {
-		max-width: 900px;
-		margin: 0 auto;
-		padding: 2rem 2rem 3rem;
+		padding: 2rem 0 3rem;
 	}
 
 	.blog-content .section-title {
@@ -222,8 +229,7 @@ const profileLinks = student.data.links ?? [];
 
 	/* Links Section */
 	.link-section {
-		max-width: 900px;
-		margin: 2rem auto 0;
+		margin: 2rem 0 0;
 		padding: 2rem;
 		background: rgba(156, 175, 136, 0.08);
 		border-radius: 30px 40px 35px 45px;
@@ -282,7 +288,7 @@ const profileLinks = student.data.links ?? [];
 		}
 
 		.blog-content {
-			padding: 1rem;
+			padding: 1rem 0;
 		}
 	}
 </style>
