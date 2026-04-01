@@ -1,312 +1,304 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import "@fontsource/space-grotesk/500.css";
-import "@fontsource/space-grotesk/700.css";
-import "@fontsource/jetbrains-mono/400.css";
-import "@fontsource/jetbrains-mono/700.css";
-import { getHomepageData } from "../lib/homepage";
+import PostList from "../components/PostList.astro";
+import { getPublishedStudents, getStudentAccent, getPublishedPostEntries } from "../lib/content";
+import { getStudentUrl } from "../lib/content";
 
-const data = await getHomepageData();
+const students = await getPublishedStudents();
+const allPosts = await getPublishedPostEntries();
+const recentPosts = allPosts.slice(0, 4);
+
+function getColorClass(accentColor: string): string {
+	if (accentColor.includes('EDC001') || accentColor.toLowerCase().includes('yellow') || accentColor.toLowerCase().includes('gold')) return 'yellow';
+	if (accentColor.includes('4A90D9') || accentColor.toLowerCase().includes('blue')) return 'blue';
+	if (accentColor.includes('8B5CF6') || accentColor.toLowerCase().includes('purple')) return 'purple';
+	if (accentColor.includes('10B981') || accentColor.toLowerCase().includes('green')) return 'green';
+	if (accentColor.includes('06B6D4') || accentColor.toLowerCase().includes('cyan')) return 'cyan';
+	return 'sage';
+}
+
+const studentData = await Promise.all(
+	students.slice(0, 5).map(async (student) => ({
+		student,
+		colorClass: getColorClass(getStudentAccent(student)),
+		initials: student.data.displayName.split(' ').map(n => n[0]).join('').toUpperCase(),
+	}))
+);
 ---
 
-<Layout description={data.description}>
-    <section class="shell homepage">
-        <section class="hero">
-            <div class="hero-copy">
-                <h1>One publish pipeline for the whole class.</h1>
-                <p class="lead">
-                    Students write inside their assigned slug, open a pull
-                    request, and publish into one shared archive after
-                    instructor approval.
-                </p>
-                <div class="hero-links">
-                    <a href="/students/">Directory</a>
-                    <a href="/docs/">Student docs</a>
-                    <a href="/rss.xml">RSS feed</a>
-                </div>
-            </div>
-            <div class="hero-visual" aria-hidden="true">
-                <div class="placeholder-card">
-                    <svg class="placeholder-icon" viewBox="0 0 512 512">
-                        <circle
-                            cx="128"
-                            cy="416"
-                            r="48"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="32"></circle>
-                        <path
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="32"
-                            d="M128 144v224M288 160l-64-64 64-64"></path>
-                        <circle
-                            cx="128"
-                            cy="96"
-                            r="48"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="32"></circle>
-                        <circle
-                            cx="384"
-                            cy="416"
-                            r="48"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="32"></circle>
-                        <path
-                            d="M240 96h84a60 60 0 0160 60v212"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="32"></path>
-                    </svg>
-                </div>
-            </div>
-        </section>
+<Layout description="A nurturing space for students to share their learning journey.">
+	<section class="shell homepage">
+		<section class="hero">
+			<div class="leaf-decoration leaf-1">🌿</div>
+			<div class="leaf-decoration leaf-2">🍃</div>
+			<div class="hero-content">
+				<div class="hero-badge">🌱 Student Learning Community</div>
+				<h1>Where Ideas <span>Bloom</span> &<br>Grow Together</h1>
+				<p class="hero-subtitle">A nurturing space for students to share their journey, discoveries, and passion for learning. Join our garden of knowledge.</p>
+				<a href="/students/" class="hero-cta">
+					Meet Our Students
+					<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<line x1="5" y1="12" x2="19" y2="12"></line>
+						<polyline points="12 5 19 12 12 19"></polyline>
+					</svg>
+				</a>
+			</div>
+		</section>
 
-        <section class="ticker" aria-label="Platform summary">
-            <span>Astro content collections</span>
-            <span>slug registry</span>
-            <span>ownership validation</span>
-            <span>instructor review</span>
-            <span>static deploy</span>
-        </section>
+		<section class="recent-posts">
+			<div class="section-container">
+				<div class="section-header">
+					<h2>Fresh from the Garden</h2>
+					<p>Latest thoughts and discoveries from our learning community</p>
+				</div>
+				<PostList 
+					items={recentPosts} 
+					showStudent={true}
+					emptyMessage="No posts yet. Check back soon!"
+				/>
+			</div>
+		</section>
 
-        <section class="grid">
-            <article class="panel">
-                <p class="label">Workflow</p>
-                {
-                    data.workflow.map((step, index) => (
-                        <div class="step">
-                            <b>{String(index + 1).padStart(2, "0")}</b>
-                            <p>{step}</p>
-                        </div>
-                    ))
-                }
-            </article>
-            <article class="panel">
-                <p class="label">Student edit surface</p>
-                <ul>
-                    {data.editPaths.map((path) => <li>{path}</li>)}
-                </ul>
-            </article>
-            <article class="panel">
-                <p class="label">Recent signals</p>
-                {
-                    data.recentPosts.map((post) => (
-                        <a class="signal" href={post.postUrl}>
-                            <strong>{post.title}</strong>
-                            <span>
-                                {post.studentName} / {post.date}
-                            </span>
-                        </a>
-                    ))
-                }
-            </article>
-        </section>
-    </section>
+		<section class="students-preview">
+			<div class="section-container">
+				<div class="section-header">
+					<h2>Our Growing Community</h2>
+					<p>Meet the students sharing their learning journey</p>
+				</div>
+				<div class="students-grid">
+					{studentData.map(({ student, colorClass, initials }) => (
+						<a href={getStudentUrl(student.data.slug)} class="student-mini">
+							<div class={`avatar ${colorClass}`}>{initials}</div>
+							<h4>{student.data.displayName.split(' ')[0]}</h4>
+							<p>"{student.data.bio.slice(0, 40)}{student.data.bio.length > 40 ? '...' : ''}"</p>
+						</a>
+					))}
+				</div>
+			</div>
+		</section>
+	</section>
 </Layout>
 
 <style>
-    .homepage {
-        padding: 1.4rem 0 1rem;
-    }
+	.homepage {
+		padding: 1rem 0 1rem;
+	}
 
-    .hero,
-    .grid {
-        position: relative;
-    }
+	/* Hero Section */
+	.hero {
+		min-height: 80vh;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 4rem 2rem;
+		position: relative;
+	}
 
-    .label,
-    .step b,
-    .ticker span {
-        font-family: "JetBrains Mono", monospace;
-        font-size: 0.8rem;
-        text-transform: uppercase;
-        letter-spacing: 0.12em;
-        color: #89a3c9;
-    }
+	.hero-content {
+		max-width: 800px;
+		text-align: center;
+		position: relative;
+		z-index: 1;
+	}
 
-    .hero {
-        display: grid;
-        grid-template-columns: minmax(0, 1.2fr) minmax(18rem, 0.8fr);
-        gap: 1.2rem;
-        padding: 2.2rem 0 1.5rem;
-    }
+	.hero-badge {
+		display: inline-block;
+		background: linear-gradient(135deg, var(--sage), var(--sand));
+		color: var(--text-dark);
+		padding: 0.6rem 1.5rem;
+		border-radius: 50px;
+		font-size: 0.85rem;
+		font-weight: 500;
+		margin-bottom: 2rem;
+		box-shadow: 0 4px 15px rgba(156, 175, 136, 0.3);
+	}
 
-    .hero-copy h1 {
-        max-width: 8.2ch;
-        margin: 0.8rem 0 1rem;
-        font-size: clamp(4rem, 9vw, 7rem);
-        line-height: 0.9;
-        letter-spacing: -0.06em;
-    }
+	.hero h1 {
+		font-family: var(--display-font);
+		font-size: 4.5rem;
+		font-weight: 400;
+		line-height: 1.1;
+		margin-bottom: 1.5rem;
+		color: var(--text-dark);
+	}
 
-    .lead {
-        max-width: 37rem;
-        margin: 0;
-        font-size: 1.1rem;
-        line-height: 1.7;
-        color: #c7d4f1;
-    }
+	.hero h1 span {
+		font-style: italic;
+		color: var(--terracotta);
+	}
 
-    .hero-links {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.8rem;
-        margin-top: 1.4rem;
-    }
+	.hero-subtitle {
+		font-size: 1.25rem;
+		color: var(--text-light);
+		max-width: 600px;
+		margin: 0 auto 3rem;
+		font-weight: 300;
+	}
 
-    .hero-links a {
-        padding: 0.8rem 1rem;
-        border-radius: 999px;
-        border: 1px solid rgba(117, 153, 255, 0.24);
-        background: rgba(10, 16, 30, 0.62);
-        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04);
-        color: inherit;
-        text-decoration: none;
-    }
+	.hero-cta {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.75rem;
+		background: var(--stone);
+		color: white;
+		padding: 1.2rem 2.5rem;
+		border-radius: 50px;
+		text-decoration: none;
+		font-weight: 500;
+		font-size: 1.1rem;
+		box-shadow: 0 8px 30px rgba(122, 132, 113, 0.3);
+		transition: all 0.3s ease;
+	}
 
-    .panel,
-    .hero-visual {
-        border: 1px solid rgba(117, 153, 255, 0.24);
-        border-radius: 1.25rem;
-        background: rgba(9, 13, 24, 0.72);
-        backdrop-filter: blur(18px);
-        box-shadow: 0 0 40px rgba(16, 24, 48, 0.28);
-    }
+	.hero-cta:hover {
+		transform: translateY(-3px);
+		box-shadow: 0 12px 40px rgba(122, 132, 113, 0.4);
+		color: white;
+	}
 
-    .panel {
-        padding: 1rem;
-    }
+	/* Decorative Leaves */
+	.leaf-decoration {
+		position: absolute;
+		font-size: 8rem;
+		opacity: 0.08;
+		animation: sway 8s ease-in-out infinite;
+		pointer-events: none;
+	}
 
-    .hero-visual {
-        overflow: hidden;
-        min-height: 21rem;
-        display: grid;
-        place-items: center;
-        padding: 1.5rem;
-        background:
-            radial-gradient(
-                circle at top,
-                rgba(66, 133, 244, 0.18),
-                transparent 52%
-            ),
-            rgba(9, 13, 24, 0.72);
-    }
+	.leaf-1 {
+		top: 15%;
+		left: 5%;
+		transform: rotate(-30deg);
+	}
 
-    .placeholder-card {
-        width: min(100%, 22rem);
-        padding: 1.4rem;
-        border: 1px solid rgba(117, 153, 255, 0.18);
-        border-radius: 1.5rem;
-        background: linear-gradient(
-            180deg,
-            rgba(10, 18, 36, 0.96),
-            rgba(6, 11, 24, 0.96)
-        );
-        box-shadow:
-            inset 0 1px 0 rgba(255, 255, 255, 0.05),
-            0 30px 60px rgba(5, 9, 20, 0.4);
-        text-align: center;
-    }
+	.leaf-2 {
+		bottom: 20%;
+		right: 8%;
+		transform: rotate(30deg);
+		animation-delay: -4s;
+	}
 
-    .placeholder-kicker,
-    .placeholder-card small {
-        font-family: "JetBrains Mono", monospace;
-        font-size: 0.78rem;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        color: #89a3c9;
-    }
+	@keyframes sway {
+		0%, 100% { transform: rotate(-30deg) translateY(0); }
+		50% { transform: rotate(-25deg) translateY(-10px); }
+	}
 
-    .placeholder-icon {
-        display: block;
-        width: min(100%, 12rem);
-        margin: 1rem auto 1.2rem;
-        color: #d6e8ff;
-        filter: drop-shadow(0 14px 30px rgba(72, 139, 255, 0.22));
-    }
+	/* Recent Posts Section */
+	.recent-posts {
+		padding: 6rem 2rem;
+		background: linear-gradient(180deg, transparent 0%, rgba(156, 175, 136, 0.05) 50%, transparent 100%);
+	}
 
-    .placeholder-card p {
-        margin: 0 0 0.65rem;
-        color: #d6e8ff;
-        line-height: 1.6;
-    }
+	.section-container {
+		max-width: 1100px;
+		margin: 0 auto;
+	}
 
-    .placeholder-card small {
-        display: block;
-    }
+	.section-header {
+		text-align: center;
+		margin-bottom: 4rem;
+	}
 
-    .ticker {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.75rem;
-        padding: 0.85rem 1rem;
-        margin: 0.4rem 0 1.3rem;
-        border-top: 1px solid rgba(117, 153, 255, 0.24);
-        border-bottom: 1px solid rgba(117, 153, 255, 0.24);
-    }
+	.section-header h2 {
+		font-family: var(--display-font);
+		font-size: 2.8rem;
+		color: var(--text-dark);
+		margin-bottom: 1rem;
+	}
 
-    .grid {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 1rem;
-    }
+	.section-header p {
+		color: var(--text-light);
+		font-size: 1.1rem;
+	}
 
-    .step {
-        display: grid;
-        grid-template-columns: 2.75rem 1fr;
-        gap: 0.7rem;
-        padding: 0.8rem 0;
-        border-top: 1px solid rgba(117, 153, 255, 0.16);
-    }
+	/* Students Preview Section */
+	.students-preview {
+		padding: 6rem 2rem;
+	}
 
-    .panel ul {
-        display: grid;
-        gap: 0.85rem;
-        padding-left: 1.2rem;
-        color: #d0dcf5;
-    }
+	.students-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+		gap: 2rem;
+		margin-top: 3rem;
+	}
 
-    .signal {
-        display: grid;
-        gap: 0.2rem;
-        padding: 0.85rem 0;
-        border-top: 1px solid rgba(117, 153, 255, 0.16);
-        color: inherit;
-        text-decoration: none;
-    }
+	.student-mini {
+		text-align: center;
+		padding: 2rem;
+		background: var(--paper);
+		border-radius: 40px 30px 50px 35px;
+		box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+		transition: all 0.3s ease;
+		text-decoration: none;
+		color: inherit;
+	}
 
-    .signal span {
-        font-family: "JetBrains Mono", monospace;
-        font-size: 0.82rem;
-        color: #89a3c9;
-    }
+	.student-mini:hover {
+		transform: translateY(-5px) scale(1.02);
+		box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+		color: inherit;
+	}
 
-    @media (max-width: 920px) {
-        .hero,
-        .grid {
-            grid-template-columns: 1fr;
-        }
+	.student-mini .avatar {
+		width: 70px;
+		height: 70px;
+		border-radius: 50%;
+		margin: 0 auto 1rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-weight: 600;
+		color: white;
+		font-size: 1.2rem;
+	}
 
-        .hero {
-            gap: 1rem;
-            padding-top: 1.8rem;
-        }
+	.student-mini .avatar.yellow { background: linear-gradient(135deg, var(--yellow), #F5D547); }
+	.student-mini .avatar.blue { background: linear-gradient(135deg, var(--blue), #5BA3E8); }
+	.student-mini .avatar.purple { background: linear-gradient(135deg, var(--purple), #A78BFA); }
+	.student-mini .avatar.green { background: linear-gradient(135deg, var(--green), #34D399); }
+	.student-mini .avatar.cyan { background: linear-gradient(135deg, var(--cyan), #22D3EE); }
+	.student-mini .avatar.sage { background: linear-gradient(135deg, var(--sage), var(--sand)); }
 
-        .hero-visual {
-            min-height: 17rem;
-        }
-    }
+	.student-mini h4 {
+		font-family: var(--display-font);
+		font-size: 1.2rem;
+		margin-bottom: 0.5rem;
+		color: var(--text-dark);
+	}
+
+	.student-mini p {
+		font-size: 0.85rem;
+		color: var(--text-light);
+		line-height: 1.5;
+		margin: 0;
+	}
+
+	@media (max-width: 768px) {
+		.hero h1 {
+			font-size: 2.8rem;
+		}
+
+		.hero-subtitle {
+			font-size: 1.1rem;
+		}
+
+		.section-header h2 {
+			font-size: 2.2rem;
+		}
+
+		.leaf-decoration {
+			font-size: 4rem;
+		}
+
+		.students-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
+	@media (max-width: 480px) {
+		.students-grid {
+			grid-template-columns: 1fr;
+		}
+	}
 </style>

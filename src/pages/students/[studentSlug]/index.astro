@@ -1,4 +1,5 @@
 ---
+import { render } from 'astro:content';
 import PostList from '../../../components/PostList.astro';
 import Layout from '../../../layouts/Layout.astro';
 import {
@@ -19,94 +20,296 @@ export async function getStaticPaths() {
 const { student } = Astro.props;
 const posts = await getPostsByStudent(student.slug);
 const accent = getStudentAccent(student);
+const initials = student.data.displayName.split(' ').map(n => n[0]).join('').toUpperCase();
 const profileLinks = student.data.links ?? [];
+
+function getColorClass(accentColor: string): string {
+	if (accentColor.includes('EDC001') || accentColor.toLowerCase().includes('yellow') || accentColor.toLowerCase().includes('gold')) return 'yellow';
+	if (accentColor.includes('4A90D9') || accentColor.toLowerCase().includes('blue')) return 'blue';
+	if (accentColor.includes('8B5CF6') || accentColor.toLowerCase().includes('purple')) return 'purple';
+	if (accentColor.includes('10B981') || accentColor.toLowerCase().includes('green')) return 'green';
+	if (accentColor.includes('06B6D4') || accentColor.toLowerCase().includes('cyan')) return 'cyan';
+	return 'sage';
+}
+
+const colorClass = getColorClass(accent);
 ---
 
 <Layout title={student.data.displayName} description={student.data.bio} accent={accent}>
-	<section class="shell student-page" style={`--student-accent: ${accent};`}>
-		<div class="profile panel">
-			<div class="profile-heading">
-				<span class="eyebrow">Student blog</span>
-				<p class="slug">/{student.slug}</p>
+	<section class="shell student-page">
+		<header class={`profile-header ${colorClass}`}>
+			<div class="profile-container">
+				<div class="profile-avatar-section">
+					<div class={`avatar-glow ${colorClass}`}></div>
+					<div class={`profile-avatar ${colorClass}`}>{initials}</div>
+					<div class="organic-ring"></div>
+				</div>
+				<div class="profile-info">
+					<h1>{student.data.displayName}</h1>
+					<div class="profile-username">@{student.data.githubUsername}</div>
+					<p class="profile-bio">"{student.data.bio}"</p>
+					<div class="profile-stats">
+						<div class="profile-stat">
+							<div class="profile-stat-value">{posts.length}</div>
+							<div class="profile-stat-label">Posts</div>
+						</div>
+					</div>
+				</div>
 			</div>
-			<h1 class="section-title">{student.data.displayName}</h1>
-			<p class="section-copy">{student.data.bio}</p>
-			<div class="meta-row">
-				<span class="pill">@{student.data.githubUsername}</span>
-				<span class="pill">{posts.length} published posts</span>
-				<a class="pill" href={getStudentUrl(student.slug)}>
-					Canonical URL
-				</a>
-			</div>
-			{profileLinks.length > 0 && (
-				<ul class="link-list">
-					{profileLinks.map((link) => (
-						<li>
-							<a href={link.url}>{link.label}</a>
-						</li>
-					))}
-				</ul>
-			)}
-		</div>
+		</header>
 
-		<section class="post-archive">
-			<div class="archive-heading">
-				<span class="eyebrow">Archive</span>
-				<h2 class="section-title">Published posts</h2>
-			</div>
-			<PostList items={posts} emptyMessage="This student has not published any posts yet." />
+		<section class="blog-content">
+			<h2 class="section-title">Recent Writings</h2>
+			<PostList 
+				items={posts} 
+				emptyMessage="This student hasn't published any posts yet. Check back soon!" 
+			/>
 		</section>
+
+		{profileLinks.length > 0 && (
+			<section class="link-section">
+				<h3>Links</h3>
+				<div class="link-list">
+					{profileLinks.map((link) => (
+						<a href={link.url} class="link-item" target="_blank" rel="noopener">
+							{link.label}
+							<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+								<path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+								<polyline points="15 3 21 3 21 9"></polyline>
+								<line x1="10" y1="14" x2="21" y2="3"></line>
+							</svg>
+						</a>
+					))}
+				</div>
+			</section>
+		)}
 	</section>
 </Layout>
 
 <style>
 	.student-page {
-		display: grid;
-		gap: 1.5rem;
-		padding: 2rem 0 3rem;
+		padding: 0 0 3rem;
 	}
 
-	.profile {
-		padding: 1.6rem;
-		background:
-			linear-gradient(145deg, rgba(10, 16, 30, 0.92), rgba(7, 11, 22, 0.96)),
-			color-mix(in srgb, var(--student-accent) 12%, transparent);
+	/* Profile Header */
+	.profile-header {
+		padding: 4rem 2rem;
+		background: linear-gradient(180deg, rgba(156, 175, 136, 0.1) 0%, transparent 100%);
+		position: relative;
+		margin-bottom: 2rem;
 	}
 
-	.profile-heading,
-	.archive-heading {
-		display: grid;
-		gap: 0.75rem;
+	.profile-header.yellow { background: linear-gradient(180deg, rgba(237, 192, 1, 0.08) 0%, transparent 100%); }
+	.profile-header.blue { background: linear-gradient(180deg, rgba(74, 144, 217, 0.08) 0%, transparent 100%); }
+	.profile-header.purple { background: linear-gradient(180deg, rgba(139, 92, 246, 0.08) 0%, transparent 100%); }
+	.profile-header.green { background: linear-gradient(180deg, rgba(16, 185, 129, 0.08) 0%, transparent 100%); }
+	.profile-header.cyan { background: linear-gradient(180deg, rgba(6, 182, 212, 0.08) 0%, transparent 100%); }
+
+	.profile-container {
+		max-width: 900px;
+		margin: 0 auto;
+		display: flex;
+		align-items: center;
+		gap: 3rem;
 	}
 
-	.slug {
-		margin: 0;
+	.profile-avatar-section {
+		position: relative;
+		flex-shrink: 0;
+	}
+
+	.profile-avatar {
+		width: 150px;
+		height: 150px;
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-weight: 700;
+		font-size: 3rem;
+		color: white;
+		box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+		position: relative;
+		z-index: 2;
+	}
+
+	.profile-avatar.yellow { background: linear-gradient(135deg, var(--yellow), #F5D547); }
+	.profile-avatar.blue { background: linear-gradient(135deg, var(--blue), #5BA3E8); }
+	.profile-avatar.purple { background: linear-gradient(135deg, var(--purple), #A78BFA); }
+	.profile-avatar.green { background: linear-gradient(135deg, var(--green), #34D399); }
+	.profile-avatar.cyan { background: linear-gradient(135deg, var(--cyan), #22D3EE); }
+	.profile-avatar.sage { background: linear-gradient(135deg, var(--sage), var(--sand)); }
+
+	.avatar-glow {
+		position: absolute;
+		top: -10px;
+		left: -10px;
+		right: -10px;
+		bottom: -10px;
+		border-radius: 50%;
+		background: inherit;
+		filter: blur(20px);
+		opacity: 0.4;
+		z-index: 1;
+		animation: pulse 3s ease-in-out infinite;
+	}
+
+	@keyframes pulse {
+		0%, 100% { transform: scale(1); opacity: 0.4; }
+		50% { transform: scale(1.05); opacity: 0.6; }
+	}
+
+	.organic-ring {
+		position: absolute;
+		top: -20px;
+		left: -20px;
+		right: -20px;
+		bottom: -20px;
+		border: 3px dashed var(--sage);
+		border-radius: 50%;
+		opacity: 0.4;
+		animation: rotate 20s linear infinite;
+	}
+
+	@keyframes rotate {
+		0% { transform: rotate(0deg); }
+		100% { transform: rotate(360deg); }
+	}
+
+	.profile-info h1 {
+		font-family: var(--display-font);
+		font-size: 3rem;
+		margin: 0 0 0.5rem 0;
+		color: var(--text-dark);
+	}
+
+	.profile-username {
 		font-family: var(--mono-font);
-		font-size: 0.9rem;
-		color: color-mix(in srgb, var(--student-accent) 65%, white 35%);
+		font-size: 1.1rem;
+		color: var(--text-light);
+		margin-bottom: 1rem;
+	}
+
+	.profile-bio {
+		font-size: 1.15rem;
+		color: var(--text-light);
+		line-height: 1.8;
+		max-width: 500px;
+		margin: 0 0 1.5rem 0;
+		font-style: italic;
+	}
+
+	.profile-stats {
+		display: flex;
+		gap: 2.5rem;
+	}
+
+	.profile-stat {
+		text-align: center;
+	}
+
+	.profile-stat-value {
+		font-family: var(--display-font);
+		font-size: 2rem;
+		font-weight: 600;
+		color: var(--stone);
+		margin-bottom: 0.25rem;
+	}
+
+	.profile-stat-label {
+		font-size: 0.85rem;
+		color: var(--text-light);
+		text-transform: uppercase;
+		letter-spacing: 1px;
+	}
+
+	/* Blog Content */
+	.blog-content {
+		max-width: 900px;
+		margin: 0 auto;
+		padding: 2rem 2rem 3rem;
+	}
+
+	.blog-content .section-title {
+		font-family: var(--display-font);
+		font-size: 2rem;
+		color: var(--text-dark);
+		margin-bottom: 2rem;
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+	}
+
+	.blog-content .section-title::after {
+		content: '';
+		flex: 1;
+		height: 1px;
+		background: linear-gradient(90deg, var(--sage), transparent);
+	}
+
+	/* Links Section */
+	.link-section {
+		max-width: 900px;
+		margin: 2rem auto 0;
+		padding: 2rem;
+		background: rgba(156, 175, 136, 0.08);
+		border-radius: 30px 40px 35px 45px;
+	}
+
+	.link-section h3 {
+		font-family: var(--display-font);
+		font-size: 1.3rem;
+		margin: 0 0 1.5rem 0;
+		color: var(--text-dark);
 	}
 
 	.link-list {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 0.75rem 1rem;
-		padding: 0;
-		margin: 1rem 0 0;
-		list-style: none;
-	}
-
-	.link-list a {
-		color: #dffef6;
-		text-decoration-thickness: 0.08em;
-		text-underline-offset: 0.15em;
-	}
-
-	.link-list a:visited {
-		color: #dffef6;
-	}
-
-	.post-archive {
-		display: grid;
 		gap: 1rem;
+	}
+
+	.link-item {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		padding: 0.75rem 1.5rem;
+		background: white;
+		border-radius: 50px;
+		color: var(--text-dark);
+		font-weight: 500;
+		box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+		transition: all 0.3s ease;
+	}
+
+	.link-item:hover {
+		transform: translateY(-3px);
+		box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+		color: var(--stone);
+	}
+
+	@media (max-width: 768px) {
+		.profile-container {
+			flex-direction: column;
+			text-align: center;
+		}
+
+		.profile-info h1 {
+			font-size: 2rem;
+		}
+
+		.profile-stats {
+			justify-content: center;
+		}
+
+		.profile-avatar {
+			width: 120px;
+			height: 120px;
+			font-size: 2.5rem;
+		}
+
+		.blog-content {
+			padding: 1rem;
+		}
 	}
 </style>

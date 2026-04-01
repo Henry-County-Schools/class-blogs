@@ -4,74 +4,110 @@ import { siteConfig } from '../config/site';
 
 <footer class="site-footer">
 	<div class="shell footer-inner">
-		<div>
-			<strong>{siteConfig.title}</strong>
-			<p>Built as one static Astro site with student-owned content folders and instructor-reviewed PRs.</p>
+		<div class="footer-brand">
+			<h3>🌿 {siteConfig.title}</h3>
+			<p>A nurturing space for students to grow their knowledge and share their learning journey with the world.</p>
 		</div>
 		<div class="footer-links">
-			<a href="/students/">Student directory</a>
-			<a href="/docs/">Student docs</a>
-			<a href="/rss.xml">RSS feed</a>
+			<h4>Quick Links</h4>
+			<ul>
+				<li><a href="/">Home</a></li>
+				<li><a href="/students/">Students</a></li>
+				<li><a href="/docs/">Docs</a></li>
+				<li><a href="/rss.xml">RSS Feed</a></li>
+			</ul>
 		</div>
+		<div class="footer-links">
+			<h4>Resources</h4>
+			<ul>
+				<li><a href="https://github.com" target="_blank" rel="noopener">GitHub</a></li>
+				<li><a href="/docs/student-blog-setup">Getting Started</a></li>
+				<li><a href="/docs/student-slug-policy">Slug Policy</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="footer-bottom">
+		<p>🌱 Cultivated with care • {siteConfig.title} {new Date().getFullYear()}</p>
 	</div>
 </footer>
 
 <style>
 	.site-footer {
-		position: relative;
-		z-index: 1;
-		padding: 1rem 1.5rem 2rem;
+		background: var(--stone);
+		color: var(--paper);
+		padding: 4rem 2rem 2rem;
+		border-radius: 50px 50px 0 0;
+		margin-top: 4rem;
+	}
+
+	.shell {
+		max-width: 1100px;
+		margin: 0 auto;
 	}
 
 	.footer-inner {
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: space-between;
-		gap: 1rem;
-		padding: 1.5rem;
-		border-top: 1px solid var(--line);
-		color: var(--muted);
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+		gap: 3rem;
 	}
 
-	.footer-inner p {
-		margin: 0.35rem 0 0;
-		max-width: 32rem;
+	.footer-brand h3 {
+		font-family: var(--display-font);
+		font-size: 1.8rem;
+		margin: 0 0 1rem 0;
 	}
 
-	.footer-links {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 1rem;
-		align-items: flex-start;
+	.footer-brand p {
+		margin: 0;
+		opacity: 0.8;
+		line-height: 1.7;
+		max-width: 300px;
+	}
+
+	.footer-links h4 {
+		font-family: var(--display-font);
+		font-size: 1.2rem;
+		margin: 0 0 1.5rem 0;
+	}
+
+	.footer-links ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	.footer-links li {
+		margin-bottom: 0.75rem;
 	}
 
 	.footer-links a {
-		padding: 0.45rem 0.65rem;
-		border: 1px solid rgba(117, 153, 255, 0.16);
-		border-radius: 999px;
-		background: rgba(10, 16, 30, 0.58);
-		color: #bcd1f3;
-		text-decoration-thickness: 0.08em;
-		text-underline-offset: 0.16em;
+		color: var(--paper);
+		opacity: 0.8;
 		text-decoration: none;
-	}
-
-	.footer-links a:visited {
-		color: #bcd1f3;
+		transition: opacity 0.3s ease;
 	}
 
 	.footer-links a:hover {
-		color: #dffef6;
-		border-color: rgba(97, 244, 222, 0.24);
+		opacity: 1;
+	}
+
+	.footer-bottom {
+		max-width: 1100px;
+		margin: 3rem auto 0;
+		padding-top: 2rem;
+		border-top: 1px solid rgba(245, 241, 232, 0.2);
+		text-align: center;
+		opacity: 0.6;
+		font-size: 0.9rem;
 	}
 
 	@media (max-width: 720px) {
 		.site-footer {
-			padding: 1rem 1rem 2rem;
+			padding: 3rem 1.5rem 2rem;
 		}
 
 		.footer-inner {
-			padding: 1.25rem 0;
+			gap: 2rem;
 		}
 	}
 </style>

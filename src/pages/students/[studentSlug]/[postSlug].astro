@@ -1,15 +1,15 @@
 ---
 import { render } from 'astro:content';
-import PostMeta from '../../../components/PostMeta.astro';
 import Layout from '../../../layouts/Layout.astro';
 import {
 	getPostSlug,
 	getPublishedPostEntries,
 	getPublishedStudentBySlug,
-	getStudentAccent,
 	getStudentSlugFromPost,
 	getStudentUrl,
+	getStudentAccent,
 } from '../../../lib/content';
+import { formatDate } from '../../../lib/format';
 
 export async function getStaticPaths() {
 	const posts = await getPublishedPostEntries();
@@ -32,90 +32,339 @@ if (!student) {
 
 const accent = getStudentAccent(student);
 const { Content } = await render(post);
+const initials = student.data.displayName.split(' ').map(n => n[0]).join('').toUpperCase();
+
+function getColorClass(accentColor: string): string {
+	if (accentColor.includes('EDC001') || accentColor.toLowerCase().includes('yellow') || accentColor.toLowerCase().includes('gold')) return 'yellow';
+	if (accentColor.includes('4A90D9') || accentColor.toLowerCase().includes('blue')) return 'blue';
+	if (accentColor.includes('8B5CF6') || accentColor.toLowerCase().includes('purple')) return 'purple';
+	if (accentColor.includes('10B981') || accentColor.toLowerCase().includes('green')) return 'green';
+	if (accentColor.includes('06B6D4') || accentColor.toLowerCase().includes('cyan')) return 'cyan';
+	return 'sage';
+}
+
+const colorClass = getColorClass(accent);
 ---
 
 <Layout title={post.data.title} description={post.data.description} accent={accent}>
 	<article class="shell post-page">
-		<header class="post-hero">
-			<div class="hero-copy panel">
-				<span class="eyebrow">Student post</span>
+		<header class={`post-hero ${colorClass}`}>
+			<div class="hero-content">
+				<div class="post-meta">
+					<span class="meta-badge">Student Post</span>
+					<span class="post-date">
+						<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+							<rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+							<line x1="16" y1="2" x2="16" y2="6"></line>
+							<line x1="8" y1="2" x2="8" y2="6"></line>
+							<line x1="3" y1="10" x2="21" y2="10"></line>
+						</svg>
+						{formatDate(post.data.publishDate, 'long')}
+					</span>
+					{post.data.updatedDate && (
+						<span class="post-updated">
+							Updated {formatDate(post.data.updatedDate, 'compact')}
+						</span>
+					)}
+				</div>
 				<h1>{post.data.title}</h1>
-				<p>{post.data.description}</p>
-			</div>
-			<div class="hero-meta panel">
-				<PostMeta
-					publishDate={post.data.publishDate}
-					updatedDate={post.data.updatedDate}
-					tags={post.data.tags}
-					studentLabel={student.data.displayName}
-					studentUrl={getStudentUrl(studentSlug)}
-				/>
-				<a class="button-link subtle" href={getStudentUrl(studentSlug)}>
-					Back to /students/{studentSlug}/
-				</a>
+				<p class="post-description">{post.data.description}</p>
+				<div class="author-bar">
+					<a href={getStudentUrl(studentSlug)} class="author-link">
+						<div class={`author-avatar ${colorClass}`}>{initials}</div>
+						<div class="author-info">
+							<span class="author-name">{student.data.displayName}</span>
+							<span class="author-username">@{student.data.githubUsername}</span>
+						</div>
+					</a>
+					{post.data.tags.length > 0 && (
+						<div class="tags">
+							{post.data.tags.map(tag => (
+								<span class="tag">{tag}</span>
+							))}
+						</div>
+					)}
+				</div>
 			</div>
 		</header>
 
-		<div class="post-body panel">
+		<div class="post-body">
 			<div class="prose">
 				<Content />
 			</div>
 		</div>
+
+		<footer class="post-footer">
+			<a href={getStudentUrl(studentSlug)} class="back-link">
+				<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+					<line x1="19" y1="12" x2="5" y2="12"></line>
+					<polyline points="12 19 5 12 12 5"></polyline>
+				</svg>
+				Back to {student.data.displayName}'s blog
+			</a>
+		</footer>
 	</article>
 </Layout>
 
 <style>
 	.post-page {
-		display: grid;
-		gap: 1.5rem;
-		padding: 2rem 0 3rem;
+		padding: 2rem 0 4rem;
 	}
 
+	/* Post Hero */
 	.post-hero {
-		display: grid;
-		grid-template-columns: minmax(0, 1.4fr) minmax(16rem, 0.8fr);
-		gap: 1.25rem;
-		align-items: start;
+		padding: 4rem 2rem;
+		background: linear-gradient(180deg, rgba(156, 175, 136, 0.08) 0%, transparent 100%);
+		margin-bottom: 3rem;
+		border-radius: 0 0 50px 50px;
 	}
 
-	.hero-copy {
-		display: grid;
+	.post-hero.yellow { background: linear-gradient(180deg, rgba(237, 192, 1, 0.06) 0%, transparent 100%); }
+	.post-hero.blue { background: linear-gradient(180deg, rgba(74, 144, 217, 0.06) 0%, transparent 100%); }
+	.post-hero.purple { background: linear-gradient(180deg, rgba(139, 92, 246, 0.06) 0%, transparent 100%); }
+	.post-hero.green { background: linear-gradient(180deg, rgba(16, 185, 129, 0.06) 0%, transparent 100%); }
+	.post-hero.cyan { background: linear-gradient(180deg, rgba(6, 182, 212, 0.06) 0%, transparent 100%); }
+
+	.hero-content {
+		max-width: 800px;
+		margin: 0 auto;
+	}
+
+	.post-meta {
+		display: flex;
+		align-items: center;
 		gap: 1rem;
-		padding: 1.35rem;
+		margin-bottom: 1.5rem;
+		flex-wrap: wrap;
 	}
 
-	.hero-copy h1 {
-		margin: 0;
+	.meta-badge {
+		background: linear-gradient(135deg, var(--sage), var(--sand));
+		color: var(--text-dark);
+		padding: 0.4rem 1rem;
+		border-radius: 50px;
+		font-size: 0.8rem;
+		font-weight: 500;
+	}
+
+	.post-date, .post-updated {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		font-size: 0.9rem;
+		color: var(--text-light);
+	}
+
+	.post-hero h1 {
 		font-family: var(--display-font);
-		font-size: clamp(2.6rem, 5vw, 5rem);
-		line-height: 0.94;
-		letter-spacing: -0.05em;
+		font-size: 3.5rem;
+		color: var(--text-dark);
+		margin: 0 0 1rem 0;
+		line-height: 1.2;
 	}
 
-	.hero-copy p {
-		margin: 0;
-		max-width: 40rem;
-		color: #d0dcf5;
-		font-size: 1.08rem;
+	.post-description {
+		font-size: 1.2rem;
+		color: var(--text-light);
+		margin: 0 0 2rem 0;
+		line-height: 1.7;
 	}
 
-	.hero-meta,
-	.post-body {
-		padding: 1.35rem;
+	/* Author Bar */
+	.author-bar {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1.5rem;
+		flex-wrap: wrap;
+		padding-top: 1.5rem;
+		border-top: 1px solid rgba(122, 132, 113, 0.2);
 	}
 
-	.hero-meta {
-		display: grid;
+	.author-link {
+		display: flex;
+		align-items: center;
 		gap: 1rem;
+		text-decoration: none;
+		color: inherit;
 	}
 
+	.author-link:hover {
+		color: inherit;
+	}
+
+	.author-avatar {
+		width: 50px;
+		height: 50px;
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-weight: 600;
+		color: white;
+		font-size: 1rem;
+		box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+	}
+
+	.author-avatar.yellow { background: linear-gradient(135deg, var(--yellow), #F5D547); }
+	.author-avatar.blue { background: linear-gradient(135deg, var(--blue), #5BA3E8); }
+	.author-avatar.purple { background: linear-gradient(135deg, var(--purple), #A78BFA); }
+	.author-avatar.green { background: linear-gradient(135deg, var(--green), #34D399); }
+	.author-avatar.cyan { background: linear-gradient(135deg, var(--cyan), #22D3EE); }
+	.author-avatar.sage { background: linear-gradient(135deg, var(--sage), var(--sand)); }
+
+	.author-info {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.author-name {
+		font-weight: 600;
+		color: var(--text-dark);
+	}
+
+	.author-username {
+		font-size: 0.85rem;
+		color: var(--text-light);
+		font-family: var(--mono-font);
+	}
+
+	.tags {
+		display: flex;
+		gap: 0.5rem;
+		flex-wrap: wrap;
+	}
+
+	.tag {
+		background: rgba(156, 175, 136, 0.2);
+		padding: 0.3rem 0.75rem;
+		border-radius: 20px;
+		font-size: 0.8rem;
+		color: var(--text-light);
+	}
+
+	/* Post Body */
 	.post-body {
-		background: rgba(10, 16, 30, 0.86);
+		max-width: 800px;
+		margin: 0 auto;
+		padding: 0 2rem;
 	}
 
-	@media (max-width: 880px) {
-		.post-hero {
-			grid-template-columns: 1fr;
+	.prose {
+		font-family: var(--body-font);
+		font-size: 1.1rem;
+		line-height: 1.9;
+		color: var(--text-dark);
+	}
+
+	.prose :global(h2) {
+		font-family: var(--display-font);
+		font-size: 2rem;
+		color: var(--text-dark);
+		margin: 2.5rem 0 1rem;
+		line-height: 1.3;
+	}
+
+	.prose :global(h3) {
+		font-family: var(--display-font);
+		font-size: 1.5rem;
+		color: var(--text-dark);
+		margin: 2rem 0 0.75rem;
+	}
+
+	.prose :global(p) {
+		margin: 0 0 1.5rem 0;
+	}
+
+	.prose :global(a) {
+		color: var(--stone);
+		text-decoration: underline;
+		text-decoration-thickness: 0.1em;
+		text-underline-offset: 0.2em;
+	}
+
+	.prose :global(a:hover) {
+		color: var(--sage);
+	}
+
+	.prose :global(pre) {
+		padding: 1.5rem;
+		border-radius: 20px;
+		background: var(--paper);
+		border: 1px solid rgba(156, 175, 136, 0.3);
+		overflow-x: auto;
+		margin: 1.5rem 0;
+	}
+
+	.prose :global(code) {
+		font-family: var(--mono-font);
+		font-size: 0.9em;
+		background: rgba(156, 175, 136, 0.15);
+		padding: 0.2rem 0.4rem;
+		border-radius: 4px;
+	}
+
+	.prose :global(pre code) {
+		background: none;
+		padding: 0;
+	}
+
+	.prose :global(ul), .prose :global(ol) {
+		margin: 1.5rem 0;
+		padding-left: 1.5rem;
+	}
+
+	.prose :global(li) {
+		margin: 0.5rem 0;
+	}
+
+	.prose :global(blockquote) {
+		border-left: 4px solid var(--sage);
+		padding-left: 1.5rem;
+		margin: 1.5rem 0;
+		font-style: italic;
+		color: var(--text-light);
+	}
+
+	/* Post Footer */
+	.post-footer {
+		max-width: 800px;
+		margin: 4rem auto 0;
+		padding: 2rem;
+		border-top: 1px solid rgba(122, 132, 113, 0.2);
+	}
+
+	.back-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		color: var(--stone);
+		font-weight: 500;
+		text-decoration: none;
+		transition: all 0.3s ease;
+	}
+
+	.back-link:hover {
+		gap: 0.75rem;
+		color: var(--sage);
+	}
+
+	@media (max-width: 768px) {
+		.post-hero h1 {
+			font-size: 2.5rem;
+		}
+
+		.author-bar {
+			flex-direction: column;
+			align-items: flex-start;
+		}
+
+		.post-body {
+			padding: 0 1rem;
+		}
+
+		.prose {
+			font-size: 1rem;
 		}
 	}
 </style>

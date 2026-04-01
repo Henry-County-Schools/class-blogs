@@ -7,71 +7,204 @@ interface Props {
 	postCount?: number;
 }
 
-const { student, postCount } = Astro.props;
+const { student } = Astro.props;
 const accent = getStudentAccent(student);
+const initials = student.data.displayName.split(' ').map(n => n[0]).join('').toUpperCase();
+
+// Map accent colors to named color classes
+function getColorClass(accentColor: string): string {
+	if (accentColor.includes('EDC001') || accentColor.toLowerCase().includes('yellow') || accentColor.toLowerCase().includes('gold')) return 'yellow';
+	if (accentColor.includes('4A90D9') || accentColor.toLowerCase().includes('blue')) return 'blue';
+	if (accentColor.includes('8B5CF6') || accentColor.toLowerCase().includes('purple')) return 'purple';
+	if (accentColor.includes('10B981') || accentColor.toLowerCase().includes('green')) return 'green';
+	if (accentColor.includes('06B6D4') || accentColor.toLowerCase().includes('cyan')) return 'cyan';
+	return 'sage';
+}
+
+const colorClass = getColorClass(accent);
 ---
 
-<article class="student-card panel" style={`--student-accent: ${accent};`}>
-	<div class="card-top">
-		<span class="slug-badge">/{student.data.slug}</span>
-		{postCount !== undefined && <span class="pill">{postCount} posts</span>}
+<article class={`student-card ${colorClass}`}>
+	<div class="card-header">
+		<div class="avatar-container">
+			<div class={`avatar ${colorClass}`}>{initials}</div>
+			<div class={`avatar-ring ${colorClass}`}></div>
+		</div>
+		<div class="student-info">
+			<h3>{student.data.displayName}</h3>
+			<span class="username">@{student.data.githubUsername}</span>
+		</div>
 	</div>
-	<h3>{student.data.displayName}</h3>
-	<p>{student.data.bio}</p>
-	<div class="card-bottom">
-		<a href={getStudentUrl(student.data.slug)}>Open blog</a>
-		<span>@{student.data.githubUsername}</span>
-	</div>
+	<p class="bio">"{student.data.bio}"</p>
+	<a href={getStudentUrl(student.data.slug)} class="view-blog-btn">
+		Visit Blog
+		<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+			<line x1="5" y1="12" x2="19" y2="12"></line>
+			<polyline points="12 5 19 12 12 19"></polyline>
+		</svg>
+	</a>
 </article>
 
 <style>
 	.student-card {
-		display: grid;
-		gap: 1rem;
-		padding: 1.25rem;
-		background:
-			linear-gradient(180deg, rgba(10, 16, 30, 0.88), rgba(7, 11, 22, 0.92)),
-			color-mix(in srgb, var(--student-accent) 10%, transparent);
+		background: var(--paper);
+		border-radius: 35px 50px 45px 40px;
+		padding: 2.5rem;
+		box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+		transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+		position: relative;
+		overflow: hidden;
 	}
 
-	.card-top,
-	.card-bottom {
+	/* Subtle accent bar at top */
+	.student-card::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 4px;
+		background: linear-gradient(90deg, var(--accent-color) 0%, var(--accent-color-light) 100%);
+		opacity: 0.3;
+		transition: opacity 0.4s ease, height 0.4s ease;
+	}
+
+	.student-card:hover::before {
+		opacity: 0.8;
+		height: 6px;
+	}
+
+	.student-card:hover {
+		transform: translateY(-10px) scale(1.02);
+		box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+		border-radius: 40px 55px 50px 45px;
+	}
+
+	/* Color variants */
+	.student-card.yellow { --accent-color: var(--yellow); --accent-color-light: #F5D547; }
+	.student-card.blue { --accent-color: var(--blue); --accent-color-light: #5BA3E8; }
+	.student-card.purple { --accent-color: var(--purple); --accent-color-light: #A78BFA; }
+	.student-card.green { --accent-color: var(--green); --accent-color-light: #34D399; }
+	.student-card.cyan { --accent-color: var(--cyan); --accent-color-light: #22D3EE; }
+	.student-card.sage { --accent-color: var(--sage); --accent-color-light: var(--sand); }
+
+	.card-header {
 		display: flex;
-		flex-wrap: wrap;
 		align-items: center;
-		justify-content: space-between;
-		gap: 0.7rem;
+		gap: 1.5rem;
+		margin-bottom: 1.5rem;
 	}
 
-	.slug-badge {
-		font-family: var(--mono-font);
-		font-size: 0.85rem;
+	.avatar-container {
+		position: relative;
+		flex-shrink: 0;
+	}
+
+	.avatar {
+		width: 70px;
+		height: 70px;
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		font-weight: 700;
-		color: color-mix(in srgb, var(--student-accent) 70%, var(--ink) 30%);
+		font-size: 1.4rem;
+		color: white;
+		box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+		position: relative;
+		z-index: 2;
 	}
 
-	h3 {
-		margin: 0;
+	.avatar.yellow { background: linear-gradient(135deg, var(--yellow), #F5D547); }
+	.avatar.blue { background: linear-gradient(135deg, var(--blue), #5BA3E8); }
+	.avatar.purple { background: linear-gradient(135deg, var(--purple), #A78BFA); }
+	.avatar.green { background: linear-gradient(135deg, var(--green), #34D399); }
+	.avatar.cyan { background: linear-gradient(135deg, var(--cyan), #22D3EE); }
+	.avatar.sage { background: linear-gradient(135deg, var(--sage), var(--sand)); }
+
+	.avatar-ring {
+		position: absolute;
+		top: -6px;
+		left: -6px;
+		right: -6px;
+		bottom: -6px;
+		border-radius: 50%;
+		border: 2px solid transparent;
+		animation: rotateRing 12s linear infinite;
+	}
+
+	.avatar-ring.yellow { border-top-color: var(--yellow); border-right-color: rgba(237, 192, 1, 0.5); }
+	.avatar-ring.blue { border-top-color: var(--blue); border-right-color: rgba(74, 144, 217, 0.5); }
+	.avatar-ring.purple { border-top-color: var(--purple); border-right-color: rgba(139, 92, 246, 0.5); }
+	.avatar-ring.green { border-top-color: var(--green); border-right-color: rgba(16, 185, 129, 0.5); }
+	.avatar-ring.cyan { border-top-color: var(--cyan); border-right-color: rgba(6, 182, 212, 0.5); }
+	.avatar-ring.sage { border-top-color: var(--sage); border-right-color: rgba(156, 175, 136, 0.5); }
+
+	@keyframes rotateRing {
+		0% { transform: rotate(0deg); }
+		100% { transform: rotate(360deg); }
+	}
+
+	.student-info h3 {
 		font-family: var(--display-font);
-		font-size: 1.85rem;
-		line-height: 0.96;
-		letter-spacing: -0.04em;
+		font-size: 1.4rem;
+		color: var(--text-dark);
+		margin: 0 0 0.25rem 0;
 	}
 
-	p {
-		margin: 0;
-		color: #cfdbf5;
+	.username {
+		font-size: 0.85rem;
+		color: var(--text-light);
+		font-family: var(--mono-font);
 	}
 
-	.card-bottom {
-		color: var(--muted);
-		font-size: 0.92rem;
+	.bio {
+		color: var(--text-light);
+		font-size: 1rem;
+		line-height: 1.7;
+		margin: 0 0 1.5rem 0;
+		font-style: italic;
 	}
 
-	.card-bottom a {
-		font-weight: 700;
-		text-decoration-thickness: 0.08em;
-		text-underline-offset: 0.15em;
-		color: #dffef6;
+	.view-blog-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.9rem 1.8rem;
+		background: var(--stone);
+		color: white;
+		text-decoration: none;
+		border-radius: 30px;
+		font-weight: 500;
+		font-size: 0.95rem;
+		transition: all 0.3s ease;
+		box-shadow: 0 4px 15px rgba(122, 132, 113, 0.3);
+	}
+
+	.view-blog-btn:hover {
+		background: var(--sage);
+		transform: translateX(5px);
+		box-shadow: 0 6px 20px rgba(122, 132, 113, 0.4);
+		color: white;
+	}
+
+	@media (max-width: 768px) {
+		.student-card {
+			padding: 2rem;
+		}
+
+		.card-header {
+			gap: 1rem;
+		}
+
+		.avatar {
+			width: 60px;
+			height: 60px;
+			font-size: 1.2rem;
+		}
+
+		.student-info h3 {
+			font-size: 1.2rem;
+		}
 	}
 </style>
