@@ -1,5 +1,5 @@
 ---
-title: "Initial post"
+title: "Adelie5595 First Week Blog Post"
 description: "This is my real blog post."
 publishDate: 2026-03-30
 tags:
