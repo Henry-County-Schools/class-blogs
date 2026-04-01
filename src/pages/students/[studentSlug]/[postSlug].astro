@@ -1,25 +1,25 @@
 ---
-import { render } from 'astro:content';
-import Layout from '../../../layouts/Layout.astro';
+import { render } from "astro:content";
+import Layout from "../../../layouts/Layout.astro";
 import {
-	getPostSlug,
-	getPublishedPostEntries,
-	getPublishedStudentBySlug,
-	getStudentSlugFromPost,
-	getStudentUrl,
-	getStudentAccent,
-} from '../../../lib/content';
-import { formatDate } from '../../../lib/format';
+    getPostSlug,
+    getPublishedPostEntries,
+    getPublishedStudentBySlug,
+    getStudentSlugFromPost,
+    getStudentUrl,
+    getStudentAccent,
+} from "../../../lib/content";
+import { formatDate } from "../../../lib/format";
 
 export async function getStaticPaths() {
-	const posts = await getPublishedPostEntries();
-	return posts.map((post) => ({
-		params: {
-			studentSlug: getStudentSlugFromPost(post),
-			postSlug: getPostSlug(post),
-		},
-		props: { post },
-	}));
+    const posts = await getPublishedPostEntries();
+    return posts.map((post) => ({
+        params: {
+            studentSlug: getStudentSlugFromPost(post),
+            postSlug: getPostSlug(post),
+        },
+        props: { post },
+    }));
 }
 
 const { post } = Astro.props;
@@ -27,317 +27,341 @@ const studentSlug = getStudentSlugFromPost(post);
 const student = await getPublishedStudentBySlug(studentSlug);
 
 if (!student) {
-	throw new Error(`Missing published student entry for slug "${studentSlug}".`);
+    throw new Error(
+        `Missing published student entry for slug "${studentSlug}".`,
+    );
 }
 
 const accent = getStudentAccent(student);
 const { Content } = await render(post);
-const initials = student.data.displayName.split(' ').map(n => n[0]).join('').toUpperCase();
+const initials = student.data.displayName
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase();
 ---
 
-<Layout title={post.data.title} description={post.data.description} accent={accent}>
-	<!-- Full-width hero header -->
-	<header class="post-hero" style={`background: linear-gradient(180deg, ${accent}12 0%, transparent 100%);`}>
-		<div class="shell hero-content">
-			<div class="post-meta">
-				<span class="meta-badge">Student Post</span>
-				<span class="post-date">
-					<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-						<rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-						<line x1="16" y1="2" x2="16" y2="6"></line>
-						<line x1="8" y1="2" x2="8" y2="6"></line>
-						<line x1="3" y1="10" x2="21" y2="10"></line>
-					</svg>
-					{formatDate(post.data.publishDate, 'long')}
-				</span>
-				{post.data.updatedDate && (
-					<span class="post-updated">
-						Updated {formatDate(post.data.updatedDate, 'compact')}
-					</span>
-				)}
-			</div>
-			<h1>{post.data.title}</h1>
-			<p class="post-description">{post.data.description}</p>
-			<div class="author-bar">
-				<a href={getStudentUrl(studentSlug)} class="author-link">
-					<div class="author-avatar" style={`background: linear-gradient(135deg, ${accent}, ${accent}dd);`}>{initials}</div>
-					<div class="author-info">
-						<span class="author-name">{student.data.displayName}</span>
-						<span class="author-username">@{student.data.githubUsername}</span>
-					</div>
-				</a>
-				{post.data.tags.length > 0 && (
-					<div class="tags">
-						{post.data.tags.map(tag => (
-							<span class="tag">{tag}</span>
-						))}
-					</div>
-				)}
-			</div>
-		</div>
-	</header>
+<Layout
+    title={post.data.title}
+    description={post.data.description}
+    accent={accent}
+>
+    <!-- Full-width hero header -->
+    <header
+        class="post-hero"
+        style={`background: linear-gradient(180deg, ${accent}12 0%, transparent 100%);`}
+    >
+        <div class="shell hero-content">
+            {
+                post.data.updatedDate && (
+                    <div class="post-meta">
+                        <span class="post-updated">
+                            Updated{" "}
+                            {formatDate(post.data.updatedDate, "compact")}
+                        </span>
+                    </div>
+                )
+            }
+            <h1>{post.data.title}</h1>
+            <p class="post-description">{post.data.description}</p>
+            <div class="author-bar">
+                <a href={getStudentUrl(studentSlug)} class="author-link">
+                    <div
+                        class="author-avatar"
+                        style={`background: linear-gradient(135deg, ${accent}, ${accent}dd);`}
+                    >
+                        {initials}
+                    </div>
+                    <div class="author-info">
+                        <span class="author-name"
+                            >{student.data.displayName}</span
+                        >
+                        <span class="author-username"
+                            >@{student.data.githubUsername} · {
+                                formatDate(post.data.publishDate, "compact")
+                            }</span
+                        >
+                    </div>
+                </a>
+                {
+                    post.data.tags.length > 0 && (
+                        <div class="tags">
+                            {post.data.tags.map((tag) => (
+                                <span class="tag">{tag}</span>
+                            ))}
+                        </div>
+                    )
+                }
+            </div>
+        </div>
+    </header>
 
-	<article class="shell post-page">
-		<div class="post-body">
-			<div class="prose">
-				<Content />
-			</div>
-		</div>
+    <article class="shell post-page">
+        <div class="post-body">
+            <div class="prose">
+                <Content />
+            </div>
+        </div>
 
-		<footer class="post-footer">
-			<a href={getStudentUrl(studentSlug)} class="back-link">
-				<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-					<line x1="19" y1="12" x2="5" y2="12"></line>
-					<polyline points="12 19 5 12 12 5"></polyline>
-				</svg>
-				Back to {student.data.displayName}'s blog
-			</a>
-		</footer>
-	</article>
+        <footer class="post-footer">
+            <a href={getStudentUrl(studentSlug)} class="back-link">
+                <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+                Back to {student.data.displayName}'s blog
+            </a>
+        </footer>
+    </article>
 </Layout>
 
 <style>
-	/* Full-width hero that extends to edges */
-	.post-hero {
-		padding: 4rem 0;
-		margin-bottom: 3rem;
-		width: 100%;
-		position: relative;
-	}
+    /* Full-width hero that extends to edges */
+    .post-hero {
+        padding: 3rem 0;
+        margin-bottom: 1rem;
+        width: 100%;
+        position: relative;
+    }
 
-	/* Hero content constrained within shell */
-	.post-hero .hero-content {
-		max-width: 800px;
-		margin: 0 auto;
-		padding: 0 2rem;
-	}
+    /* Hero content constrained within shell */
+    .post-hero .hero-content {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0 2rem;
+    }
 
-	.post-meta {
-		display: flex;
-		align-items: center;
-		gap: 1rem;
-		margin-bottom: 1.5rem;
-		flex-wrap: wrap;
-	}
+    .post-meta {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 0.75rem;
+        flex-wrap: wrap;
+        font-size: 0.85rem;
+        color: var(--text-light);
+    }
 
-	.meta-badge {
-		background: linear-gradient(135deg, var(--sage), var(--sand));
-		color: var(--text-dark);
-		padding: 0.4rem 1rem;
-		border-radius: 50px;
-		font-size: 0.8rem;
-		font-weight: 500;
-	}
+    .post-updated {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
 
-	.post-date, .post-updated {
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
-		font-size: 0.9rem;
-		color: var(--text-light);
-	}
+    .post-hero h1 {
+        font-family: var(--display-font);
+        font-size: 3.5rem;
+        color: var(--text-dark);
+        margin: 0 0 1rem 0;
+        line-height: 1.2;
+    }
 
-	.post-hero h1 {
-		font-family: var(--display-font);
-		font-size: 3.5rem;
-		color: var(--text-dark);
-		margin: 0 0 1rem 0;
-		line-height: 1.2;
-	}
+    .post-description {
+        font-size: 1.2rem;
+        color: var(--text-light);
+        margin: 0 0 2rem 0;
+        line-height: 1.7;
+    }
 
-	.post-description {
-		font-size: 1.2rem;
-		color: var(--text-light);
-		margin: 0 0 2rem 0;
-		line-height: 1.7;
-	}
+    /* Author Bar */
+    .author-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(122, 132, 113, 0.2);
+    }
 
-	/* Author Bar */
-	.author-bar {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 1.5rem;
-		flex-wrap: wrap;
-		padding-top: 1.5rem;
-		border-top: 1px solid rgba(122, 132, 113, 0.2);
-	}
+    .author-link {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        text-decoration: none;
+        color: inherit;
+    }
 
-	.author-link {
-		display: flex;
-		align-items: center;
-		gap: 1rem;
-		text-decoration: none;
-		color: inherit;
-	}
+    .author-link:hover {
+        color: inherit;
+    }
 
-	.author-link:hover {
-		color: inherit;
-	}
+    .author-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        color: white;
+        font-size: 1rem;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
 
-	.author-avatar {
-		width: 50px;
-		height: 50px;
-		border-radius: 50%;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		font-weight: 600;
-		color: white;
-		font-size: 1rem;
-		box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-	}
+    .author-info {
+        display: flex;
+        flex-direction: column;
+    }
 
-	.author-info {
-		display: flex;
-		flex-direction: column;
-	}
+    .author-name {
+        font-weight: 600;
+        color: var(--text-dark);
+    }
 
-	.author-name {
-		font-weight: 600;
-		color: var(--text-dark);
-	}
+    .author-username {
+        font-size: 0.85rem;
+        color: var(--text-light);
+        font-family: var(--mono-font);
+    }
 
-	.author-username {
-		font-size: 0.85rem;
-		color: var(--text-light);
-		font-family: var(--mono-font);
-	}
+    .tags {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
 
-	.tags {
-		display: flex;
-		gap: 0.5rem;
-		flex-wrap: wrap;
-	}
+    .tag {
+        background: rgba(156, 175, 136, 0.2);
+        padding: 0.3rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        color: var(--text-light);
+    }
 
-	.tag {
-		background: rgba(156, 175, 136, 0.2);
-		padding: 0.3rem 0.75rem;
-		border-radius: 20px;
-		font-size: 0.8rem;
-		color: var(--text-light);
-	}
+    /* Post Body */
+    .post-page {
+        padding: 0 0 4rem;
+    }
 
-	/* Post Body */
-	.post-page {
-		padding: 0 0 4rem;
-	}
+    .post-body {
+        max-width: 800px;
+        margin: 0 auto;
+    }
 
-	.post-body {
-		max-width: 800px;
-		margin: 0 auto;
-	}
+    .prose {
+        font-family: var(--body-font);
+        font-size: 1.1rem;
+        line-height: 1.9;
+        color: var(--text-dark);
+    }
 
-	.prose {
-		font-family: var(--body-font);
-		font-size: 1.1rem;
-		line-height: 1.9;
-		color: var(--text-dark);
-	}
+    .prose :global(:first-child) {
+        margin-top: 0;
+    }
 
-	.prose :global(h2) {
-		font-family: var(--display-font);
-		font-size: 2rem;
-		color: var(--text-dark);
-		margin: 2.5rem 0 1rem;
-		line-height: 1.3;
-	}
+    .prose :global(h2) {
+        font-family: var(--display-font);
+        font-size: 2rem;
+        color: var(--text-dark);
+        margin: 2.5rem 0 1rem;
+        line-height: 1.3;
+    }
 
-	.prose :global(h3) {
-		font-family: var(--display-font);
-		font-size: 1.5rem;
-		color: var(--text-dark);
-		margin: 2rem 0 0.75rem;
-	}
+    .prose :global(h3) {
+        font-family: var(--display-font);
+        font-size: 1.5rem;
+        color: var(--text-dark);
+        margin: 2rem 0 0.75rem;
+    }
 
-	.prose :global(p) {
-		margin: 0 0 1.5rem 0;
-	}
+    .prose :global(p) {
+        margin: 0 0 1.5rem 0;
+    }
 
-	.prose :global(a) {
-		color: var(--stone);
-		text-decoration: underline;
-		text-decoration-thickness: 0.1em;
-		text-underline-offset: 0.2em;
-	}
+    .prose :global(a) {
+        color: var(--stone);
+        text-decoration: underline;
+        text-decoration-thickness: 0.1em;
+        text-underline-offset: 0.2em;
+    }
 
-	.prose :global(a:hover) {
-		color: var(--sage);
-	}
+    .prose :global(a:hover) {
+        color: var(--sage);
+    }
 
-	.prose :global(pre) {
-		padding: 1.5rem;
-		border-radius: 20px;
-		background: var(--paper);
-		border: 1px solid rgba(156, 175, 136, 0.3);
-		overflow-x: auto;
-		margin: 1.5rem 0;
-	}
+    .prose :global(pre) {
+        padding: 1.5rem;
+        border-radius: 20px;
+        background: var(--paper);
+        border: 1px solid rgba(156, 175, 136, 0.3);
+        overflow-x: auto;
+        margin: 1.5rem 0;
+    }
 
-	.prose :global(code) {
-		font-family: var(--mono-font);
-		font-size: 0.9em;
-		background: rgba(156, 175, 136, 0.15);
-		padding: 0.2rem 0.4rem;
-		border-radius: 4px;
-	}
+    .prose :global(code) {
+        font-family: var(--mono-font);
+        font-size: 0.9em;
+        background: rgba(156, 175, 136, 0.15);
+        padding: 0.2rem 0.4rem;
+        border-radius: 4px;
+    }
 
-	.prose :global(pre code) {
-		background: none;
-		padding: 0;
-	}
+    .prose :global(pre code) {
+        background: none;
+        padding: 0;
+    }
 
-	.prose :global(ul), .prose :global(ol) {
-		margin: 1.5rem 0;
-		padding-left: 1.5rem;
-	}
+    .prose :global(ul),
+    .prose :global(ol) {
+        margin: 1.5rem 0;
+        padding-left: 1.5rem;
+    }
 
-	.prose :global(li) {
-		margin: 0.5rem 0;
-	}
+    .prose :global(li) {
+        margin: 0.5rem 0;
+    }
 
-	.prose :global(blockquote) {
-		border-left: 4px solid var(--sage);
-		padding-left: 1.5rem;
-		margin: 1.5rem 0;
-		font-style: italic;
-		color: var(--text-light);
-	}
+    .prose :global(blockquote) {
+        border-left: 4px solid var(--sage);
+        padding-left: 1.5rem;
+        margin: 1.5rem 0;
+        font-style: italic;
+        color: var(--text-light);
+    }
 
-	/* Post Footer */
-	.post-footer {
-		margin: 4rem 0 0;
-		padding-top: 2rem;
-		border-top: 1px solid rgba(122, 132, 113, 0.2);
-	}
+    /* Post Footer */
+    .post-footer {
+        margin: 4rem 0 0;
+        padding-top: 2rem;
+        border-top: 1px solid rgba(122, 132, 113, 0.2);
+    }
 
-	.back-link {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.5rem;
-		color: var(--stone);
-		font-weight: 500;
-		text-decoration: none;
-		transition: all 0.3s ease;
-	}
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--stone);
+        font-weight: 500;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
 
-	.back-link:hover {
-		gap: 0.75rem;
-		color: var(--sage);
-	}
+    .back-link:hover {
+        gap: 0.75rem;
+        color: var(--sage);
+    }
 
-	@media (max-width: 768px) {
-		.post-hero h1 {
-			font-size: 2.5rem;
-		}
+    @media (max-width: 768px) {
+        .post-hero h1 {
+            font-size: 2.5rem;
+        }
 
-		.author-bar {
-			flex-direction: column;
-			align-items: flex-start;
-		}
+        .author-bar {
+            flex-direction: column;
+            align-items: flex-start;
+        }
 
-		.prose {
-			font-size: 1rem;
-		}
-	}
+        .prose {
+            font-size: 1rem;
+        }
+    }
 </style>
