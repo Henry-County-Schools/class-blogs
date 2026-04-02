@@ -8,6 +8,12 @@ import { getHomepageData } from "../lib/homepage";
 import Navigation from "../components/Navigation.astro";
 import "../styles/global.css"
 import Footer from "../components/Footer.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const pageTitle = "Home Page";
+<BaseLayout>
+<h2>My awesome blog subtitle</h2>
+</BaseLayout>
 
 const data = await getHomepageData();
 const pageTitle = "Home Page";
