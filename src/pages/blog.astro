@@ -18,5 +18,14 @@ import Footer from "../components/Footer.astro";
       <li><a href="/posts/post-3/">Post 3</a></li>
     </ul>
     <Footer />
+    <script>
+       const menu = document.querySelector('.menu');
+
+       menu?.addEventListener('click', () => {
+         const isExpanded = menu.getAttribute('aria-expanded') === 'true';
+         menu.setAttribute('aria-expanded', !isExpanded);
+       });
+
+    </script>
   </body>
 </html>
