@@ -1,0 +1,14 @@
+{
+  "slug": "TealAxolotl-832",
+  "displayName": "Teal Axolotl",
+  "githubUsername": "TealAxolotl-832",
+  "bio": "I love Axolotls and learning about new things in Javascript.",
+  "accentColor": "#008080",
+  "links": [
+    {
+      "label": "Sample Student Guide",
+      "url": "https://blogs.sow.care/docs/"
+    }
+  ],
+  "published": true
+}
