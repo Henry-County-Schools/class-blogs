@@ -1,5 +1,5 @@
 ---
-title: ""
+title: "Second Post/Blog on Astroblog"
 description: "AI-generated sample post about how finite automata connect theory to the practical task of tokenizing source code."
 publishDate: 2026-03-06
 tags:
