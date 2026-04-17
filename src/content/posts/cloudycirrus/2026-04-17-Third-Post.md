@@ -16,4 +16,6 @@ This week my computer science 2 teacher directed my class to focus and continue 
 
 Unlike what my second blog post discussed about me creating an app for my profound interest in weather, I decided to go back to my original idea of creating a website instead. I found that it would be best to create a website about meteorology in lieu of an app because my passion project outside of school is creating a website dedicated to all things weather. I informed my teacher of this change, and he approved of my sudden change. Then my teacher advised me to set up my website using Next.js.
 
+In addition to my 20% Project, my teacher showed me some pretty neat weather API content. He showed me where to find weather APIs via weather.gov or the NWS's website. I thought the weather API was pretty cool, and I'm considering using it in my website.
+
 As of currently, I am making adequate progress on my 20% Project despite the sundry of setbacks. I am learning the ins and outs of Next.js, and I am adjusting to it as well. I cannot wait to see the final product of my 20% Project!
