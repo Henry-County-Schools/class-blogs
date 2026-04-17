@@ -1,0 +1,14 @@
+{
+  "slug": "Ieatfries12345",
+  "displayName": "i eat fries",
+  "githubUsername": "Ieatfries12345",
+  "bio": "i love space",
+  "accentColor": "#ff51be",
+  "links": [
+    {
+      "label": "Student Setup Docs",
+      "url": "https://blogs.sow.care/docs/"
+    }
+  ],
+  "published": true
+}
