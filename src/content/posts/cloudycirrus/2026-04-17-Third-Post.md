@@ -1,6 +1,6 @@
 ---
 title: "Third Post/Blog on Astroblog"
-description: "My belated weekly Astroblog post discussing what I did in class last week."
+description: "My weekly Astroblog post discussing what I did in class this past week."
 publishDate: 2026-04-17
 tags:
   - astroblog
