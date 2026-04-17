@@ -7,71 +7,177 @@ interface Props {
 	postCount?: number;
 }
 
-const { student, postCount } = Astro.props;
+const { student } = Astro.props;
 const accent = getStudentAccent(student);
+const initials = student.data.displayName.split(' ').map(n => n[0]).join('').toUpperCase();
+
+// Generate a lighter version of the accent for gradients
+function getLighterAccent(color: string): string {
+	// Simple lightening - if it's a hex color, we'll use it as-is for the gradient
+	// CSS will handle the blending via gradients
+	return color;
+}
 ---
 
-<article class="student-card panel" style={`--student-accent: ${accent};`}>
-	<div class="card-top">
-		<span class="slug-badge">/{student.data.slug}</span>
-		{postCount !== undefined && <span class="pill">{postCount} posts</span>}
+<article class="student-card" style={`--accent-color: ${accent};`}>
+	<div class="card-header">
+		<div class="avatar-container">
+			<div class="avatar" style={`background: linear-gradient(135deg, ${accent}, ${accent}dd);`}>{initials}</div>
+			<div class="avatar-ring" style={`border-top-color: ${accent}; border-right-color: ${accent}80;`}></div>
+		</div>
+		<div class="student-info">
+			<h3>{student.data.displayName}</h3>
+			<span class="username">@{student.data.githubUsername}</span>
+		</div>
 	</div>
-	<h3>{student.data.displayName}</h3>
-	<p>{student.data.bio}</p>
-	<div class="card-bottom">
-		<a href={getStudentUrl(student.data.slug)}>Open blog</a>
-		<span>@{student.data.githubUsername}</span>
-	</div>
+	<p class="bio">"{student.data.bio}"</p>
+	<a href={getStudentUrl(student.data.slug)} class="view-blog-btn">
+		Visit Blog
+		<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+			<line x1="5" y1="12" x2="19" y2="12"></line>
+			<polyline points="12 5 19 12 12 19"></polyline>
+		</svg>
+	</a>
 </article>
 
 <style>
 	.student-card {
-		display: grid;
-		gap: 1rem;
-		padding: 1.25rem;
-		background:
-			linear-gradient(180deg, rgba(10, 16, 30, 0.88), rgba(7, 11, 22, 0.92)),
-			color-mix(in srgb, var(--student-accent) 10%, transparent);
+		background: var(--paper);
+		border-radius: 35px 50px 45px 40px;
+		padding: 2.5rem;
+		box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+		transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+		position: relative;
+		overflow: hidden;
 	}
 
-	.card-top,
-	.card-bottom {
+	/* Subtle accent bar at top using the student's actual color */
+	.student-card::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 4px;
+		background: linear-gradient(90deg, var(--accent-color) 0%, var(--accent-color) 80%, transparent 100%);
+		opacity: 0.4;
+		transition: opacity 0.4s ease, height 0.4s ease;
+	}
+
+	.student-card:hover::before {
+		opacity: 0.9;
+		height: 6px;
+	}
+
+	.student-card:hover {
+		transform: translateY(-10px) scale(1.02);
+		box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+		border-radius: 40px 55px 50px 45px;
+	}
+
+	.card-header {
 		display: flex;
-		flex-wrap: wrap;
 		align-items: center;
-		justify-content: space-between;
-		gap: 0.7rem;
+		gap: 1.5rem;
+		margin-bottom: 1.5rem;
 	}
 
-	.slug-badge {
-		font-family: var(--mono-font);
-		font-size: 0.85rem;
+	.avatar-container {
+		position: relative;
+		flex-shrink: 0;
+	}
+
+	.avatar {
+		width: 70px;
+		height: 70px;
+		border-radius: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		font-weight: 700;
-		color: color-mix(in srgb, var(--student-accent) 70%, var(--ink) 30%);
+		font-size: 1.4rem;
+		color: white;
+		box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+		position: relative;
+		z-index: 2;
 	}
 
-	h3 {
-		margin: 0;
+	.avatar-ring {
+		position: absolute;
+		top: -6px;
+		left: -6px;
+		right: -6px;
+		bottom: -6px;
+		border-radius: 50%;
+		border: 2px solid transparent;
+		animation: rotateRing 12s linear infinite;
+	}
+
+	@keyframes rotateRing {
+		0% { transform: rotate(0deg); }
+		100% { transform: rotate(360deg); }
+	}
+
+	.student-info h3 {
 		font-family: var(--display-font);
-		font-size: 1.85rem;
-		line-height: 0.96;
-		letter-spacing: -0.04em;
+		font-size: 1.4rem;
+		color: var(--text-dark);
+		margin: 0 0 0.25rem 0;
 	}
 
-	p {
-		margin: 0;
-		color: #cfdbf5;
+	.username {
+		font-size: 0.85rem;
+		color: var(--text-light);
+		font-family: var(--mono-font);
 	}
 
-	.card-bottom {
-		color: var(--muted);
-		font-size: 0.92rem;
+	.bio {
+		color: var(--text-light);
+		font-size: 1rem;
+		line-height: 1.7;
+		margin: 0 0 1.5rem 0;
+		font-style: italic;
 	}
 
-	.card-bottom a {
-		font-weight: 700;
-		text-decoration-thickness: 0.08em;
-		text-underline-offset: 0.15em;
-		color: #dffef6;
+	.view-blog-btn {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+		padding: 0.9rem 1.8rem;
+		background: var(--stone);
+		color: white;
+		text-decoration: none;
+		border-radius: 30px;
+		font-weight: 500;
+		font-size: 0.95rem;
+		transition: all 0.3s ease;
+		box-shadow: 0 4px 15px rgba(122, 132, 113, 0.3);
+	}
+
+	.view-blog-btn:hover {
+		background: var(--sage);
+		transform: translateX(5px);
+		box-shadow: 0 6px 20px rgba(122, 132, 113, 0.4);
+		color: white;
+	}
+
+	@media (max-width: 768px) {
+		.student-card {
+			padding: 2rem;
+		}
+
+		.card-header {
+			gap: 1rem;
+		}
+
+		.avatar {
+			width: 60px;
+			height: 60px;
+			font-size: 1.2rem;
+		}
+
+		.student-info h3 {
+			font-size: 1.2rem;
+		}
 	}
 </style>
