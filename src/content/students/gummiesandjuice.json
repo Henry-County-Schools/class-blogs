@@ -1,0 +1,14 @@
+{
+  "slug": "gummiesandjuice",
+  "displayName": "graygoose",
+  "githubUsername": "gummiesandjuice",
+  "bio": "I like to make fun games in cs!",
+  "accentColor": "#61f4de",
+  "links": [
+    {
+      "label": "Sample Student Guide",
+      "url": "https://blogs.sow.care/docs/"
+    }
+  ],
+  "published": true
+}
