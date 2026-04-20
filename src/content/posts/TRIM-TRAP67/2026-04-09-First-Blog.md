@@ -7,6 +7,6 @@ tags:
 draft: false
 ---
 This is my first blog post. In this post, I will write about what I want to build.
-1. App that you can monitior your vitals at all times
+1. App that you can monitior your real genuine vitals at all times in real time.
 2. App that you can control your home with when far away
 These are the kind of apps that I want to build and learn about as I build them.
