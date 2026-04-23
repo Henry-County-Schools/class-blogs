@@ -1,0 +1,14 @@
+{
+  "slug": "Togore-Dreemurr",
+  "displayName": "Togore",
+  "githubUsername": "Togore-Dreemurr",
+  "bio": "Learning how to code!",
+  "accentColor": "#00ffff",
+  "links": [
+    {
+      "label": "Student Setup Docs",
+      "url": "https://blogs.sow.care/docs/"
+    }
+  ],
+  "published": true
+}

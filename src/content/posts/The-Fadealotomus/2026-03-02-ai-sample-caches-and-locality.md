@@ -1,14 +1,24 @@
 ---
-title: "THE Fadealotomus's Initial Post"
-description: "First actual post."
-publishDate: 2026-03-27
+title: "THE Fadealotomus, Week 30"
+description: "Let's take a look... 👀"
+publishDate: 2026-04-10
 tags:
   - Weekly Work
 draft: false
 ---
 
-## 3/23-27, Week 28
+## 4/09/26, Week 30
 
-From Monday to Wednesday, we worked on KC7, and getting that set up for the people that wanted to go to the Tech Mania trip. On Thursday, I, along with probably most of the class, went to said Tech Mania trip.
+**Monday:** I was working on the 20% project... again, as usual. Up until Wednesday, I have been having problems with finishing the tutorial, due to (at the time) unknown issues. This was especially the case when it came to images simply not existing within my files.
 
-I may not have won anything due to not getting first and due to not being lucky enough in the giveaway, but the team of my partner and I got 5th overall out of the ~100-120 groups in the tournament! If that doesn't mean something, I am unsure of what does.
+**Tuesday:** Absent.
+
+**Wednesday:** *I figured out the issue.*
+It was revolving around something at the beginning of the tutorial, something that was so simple, yet I forgot so dearly...
+***A file with ONLY the images I needed for the tutorial.***
+So, I added them, now cruising more quickly throughout the chapter. Simple as that.
+I then had another problem, revolving around the emojis. Turns out that, due to the fact that ALL the files are just sitting in this folder within a folder, I have to make the relevant path have two ../'s (../../) in order to correctly resolve... which is definitely gonna be tedious. Probably gonna mess with the folder structure to fix the repetition I am likely to face.
+
+Thursday: I, actually, did ***NOT*** take the time to do this; instead, I simply just went on to complete Chapter 5 AND Chapter 6.
+
+Friday: I finished up typing this, and I plan to AT LEAST be done with chapter 7, fix the structure (hopefully), and *maaaaaybe* get to half of chapter 8, we'll see. Results shall be told on the next blog.
