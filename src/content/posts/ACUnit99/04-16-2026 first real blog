@@ -1,8 +1,10 @@
+---
 title: "First true blog"
 description: "This is my first real blog."
 publishDate: 04-09-2026
 tags:
   - misc
 draft: false
+---
 
 This week we learned how to make games on zed and terminal.
