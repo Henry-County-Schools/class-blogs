@@ -7,4 +7,4 @@ tags:
 draft: false
 ---
 
-  This is my first post. I want to learn how to make a 3D video game
+This is my first post. I want to learn how to make a 3D video game
