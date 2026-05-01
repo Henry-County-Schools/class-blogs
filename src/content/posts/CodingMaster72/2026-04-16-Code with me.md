@@ -5,7 +5,6 @@ publishDate: 2026-03-23
 tags:
   - astroblog
   - computer-program
-  - performance
 draft: false
 ---
 
