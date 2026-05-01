@@ -1,7 +1,7 @@
 ---
 title: "Game ready to design"
 description: "I am ready to make characters and details as I learn."
-publishDate: 2026-03-23
+publishDate: 2026-04-10
 tags:
   - game
   - learning
