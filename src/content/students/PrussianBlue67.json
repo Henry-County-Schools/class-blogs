@@ -1,0 +1,14 @@
+{
+  "slug": "PrussianBlue67",
+  "displayName": "Squid",
+  "githubUsername": "PrussianBlue67",
+  "bio": "Build a game on a website",
+  "accentColor": "#0000FF",
+  "links": [
+    {
+      "label": "Student Setup Docs",
+      "url": "https://blogs.sow.care/docs/"
+    }
+  ],
+  "published": true
+}
