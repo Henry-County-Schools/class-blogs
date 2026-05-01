@@ -1,0 +1,14 @@
+{
+  "slug": "MasterChief-Covanant",
+  "displayName": "Choom",
+  "githubUsername": "MasterChief-Covanant",
+  "bio": "Likes Cyberpunk 2077",
+  "accentColor": "#041E42",
+  "links": [
+    {
+      "label": "Sample Student Guide",
+      "url": "https://blogs.sow.care/docs/"
+    }
+  ],
+  "published": true
+}

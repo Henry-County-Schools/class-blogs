@@ -1,0 +1,14 @@
+{
+  "slug": "ACUnit99",
+  "displayName": "blue tree",
+  "githubUsername": "ACUnit99",
+  "bio": "Likes Cyberpunk 2077 and wants to learn how to make ambitious 3D games",
+  "accentColor": "#000000",
+  "links": [
+    {
+      "label": "Sample Student Guide",
+      "url": "https://blogs.sow.care/docs/"
+    }
+  ],
+  "published": true
+}

@@ -1,8 +1,8 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig } from "astro/config";
 
-const site = process.env.SITE_URL ?? 'https://blogs.sow.care';
+const site = process.env.SITE_URL ?? "https://blogs.sow.care";
 
 export default defineConfig({
-	site,
+  site,
 });

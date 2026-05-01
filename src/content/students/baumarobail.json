@@ -1,0 +1,14 @@
+{
+  "slug": "bombrob",
+  "displayName": "Robb Bomb",
+  "githubUsername": "bombrob",
+  "bio": "I am the greatest to EVER do it.",
+  "accentColor": "#61f4de",
+  "links": [
+    {
+      "label": "Sample Student Guide",
+      "url": "https://blogs.sow.care/docs/"
+    }
+  ],
+  "published": true
+}
