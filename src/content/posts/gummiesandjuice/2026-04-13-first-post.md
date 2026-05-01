@@ -1,7 +1,7 @@
 ---
 title: "First astro blog"
 description: "What i have learned in mr chisolms."
-publishDate: 2026-04-14
+publishDate: 2026-04-13
 tags:
   - computer science
 draft: false
