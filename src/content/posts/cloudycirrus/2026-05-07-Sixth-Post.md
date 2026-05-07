@@ -11,7 +11,7 @@ draft: false
 
 ## This is my article
 
-Welcome to my fifth weekly blog post! If this is the first blog of mine that you read please know that these blogs that I publish each week are essentially a synopsis of what I've been doing in my computer science 2 class.
+Welcome to my third weekly blog post! If this is the first blog of mine that you read please know that these blogs that I publish each week are essentially a synopsis of what I've been doing in my computer science 2 class.
 
 This week in computer science 2 class we worked more on our 20% Project, and we did Demo Day! Demo Day was on Wednesday which involved myself and my peers presenting in front of the class about what our 20% Project is and our progress on the aforementioned project. I presented what I had so far, and I mentioned that I was using Next.JS to construct my website. I also made sure to keep my presentation concise, and I mentioned what I struggled with when coding my website.
 
