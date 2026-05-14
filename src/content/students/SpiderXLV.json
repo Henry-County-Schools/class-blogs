@@ -1,0 +1,14 @@
+{
+  "slug": "spiderXLV",
+  "displayName": "SpiderXLV",
+  "githubUsername": "SpiderXLV",
+  "bio": "Interested in mythology and gaming exited to learn movement and renduring in computer science",
+  "accentColor": "#ff51be",
+  "links": [
+    {
+      "label": "Student Setup Docs",
+      "url": "https://blogs.sow.care/docs/"
+    }
+  ],
+  "published": true
+}
