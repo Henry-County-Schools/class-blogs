@@ -1,3 +1,4 @@
+---
 title: "This Week's Work"
 description: "What our class is doing this week"
 publishDate: 04-08-2026
