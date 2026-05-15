@@ -1,0 +1,14 @@
+{
+  "slug": "SaltySalmon497",
+  "displayName": "Salmon",
+  "githubUsername": "SaltySalmon497",
+  "bio": "I like to learn how to code and to apply that knowledge to make cool things.",
+  "accentColor": "#ff77a8",
+  "links": [
+    {
+      "label": "Student Setup Docs",
+      "url": "https://blogs.sow.care/docs/"
+    }
+  ],
+  "published": true
+}
