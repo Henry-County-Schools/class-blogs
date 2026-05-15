@@ -1,5 +1,5 @@
 ---
-title: "Second Class Bolg"
+title: "Second Class Blog"
 description: "This is my Second class blog post using astroblog"
 publishDate: 2026-04-16
 tags:

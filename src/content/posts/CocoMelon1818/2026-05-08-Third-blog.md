@@ -1,5 +1,5 @@
 ---
-title: "Third Class Bolg"
+title: "Third Class Blog"
 description: "This is my Third class blog post"
 publishDate: 2026-05-08
 tags:
